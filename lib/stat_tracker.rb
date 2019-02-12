@@ -13,9 +13,9 @@ class StatTracker
   end
 
   def self.from_csv(locations)
-    games_data = self.read_game_file(locations[:games])
-    teams_data = self.read_team_file(locations[:teams])
-    game_teams_data = self.read_game_teams_file(locations[:game_teams])
+    games_data = read_game_file(locations[:games])
+    teams_data = read_team_file(locations[:teams])
+    game_teams_data = read_game_teams_file(locations[:game_teams])
     StatTracker.new(games_data, teams_data, game_teams_data)
   end
 
@@ -24,17 +24,17 @@ class StatTracker
   end
 
   def self.read_game_file(game_file)
-    games = self.read_in_csv(game_file)
+    games = read_in_csv(game_file)
     games.map { |row| Game.new(row) }
   end
 
   def self.read_team_file(team_file)
-    teams = self.read_in_csv(team_file)
+    teams = read_in_csv(team_file)
     teams.map { |row| Team.new(row) }
   end
 
   def self.read_game_teams_file(game_teams_file)
-    game_teams = self.read_in_csv(game_teams_file)
+    game_teams = read_in_csv(game_teams_file)
     game_teams.map { |row| GameTeam.new(row) }
   end
 end
