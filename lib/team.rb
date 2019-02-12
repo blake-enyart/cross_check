@@ -9,6 +9,4 @@ class Team
     @abbreviation = row[:abbreviation]
     @link = row[:link]
   end
-
-  
 end
