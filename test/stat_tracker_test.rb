@@ -12,7 +12,7 @@ class StatTrackerTest < Minitest::Test
     assert_instance_of StatTracker, @stat_tracker
   end
 
-  def test_from_game_csv_extracts_line
+  def test_from_game_csv_extracts_line_to_game_object
     game_path = './data/game_dummy.csv'
     team_path = './data/team_info_dummy.csv'
     game_teams_path = './data/game_teams_stats_dummy.csv'
