@@ -10,9 +10,6 @@ class StatTracker
     @teams = teams_data
     @game_teams = game_teams_data
     # @game_stats = GameStats.new(@games,@teams,@game_teams)
-    # @league_stats = LeagueStats.new(@games,@teams,@game_teams)
-    # @team_stats = TeamStats.new(@games,@teams,@game_teams)
-    # @season_stats = SeasonStats.new(@games,@teams,@game_teams)
   end
 
   def self.from_csv(locations)
@@ -22,24 +19,22 @@ class StatTracker
     StatTracker.new(games_data, teams_data, game_teams_data)
   end
 
+  def self.read_in_csv(file_path)
+    CSV.open(file_path, headers: true, header_converters: :symbol)
+  end
+
   def self.read_game_file(game_file)
-    games = CSV.open(game_file, headers: true, header_converters: :symbol)
-    games.map do |row|
-      Game.new(row)
-    end
+    games = self.read_in_csv(game_file)
+    games.map { |row| Game.new(row) }
   end
 
   def self.read_team_file(team_file)
-    teams = CSV.open(team_file, headers: true, header_converters: :symbol)
-    teams.map do |row|
-      Team.new(row)
-    end
+    teams = self.read_in_csv(team_file)
+    teams.map { |row| Team.new(row) }
   end
 
   def self.read_game_teams_file(game_teams_file)
-    game_teams = CSV.open(game_teams_file, headers: true, header_converters: :symbol)
-    game_teams.map do |row|
-      GameTeam.new(row)
-    end
+    game_teams = self.read_in_csv(game_teams_file)
+    game_teams.map { |row| GameTeam.new(row) }
   end
 end
