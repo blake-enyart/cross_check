@@ -12,15 +12,16 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_from_game_csv_extracts_line
-    game_path = './data/game.csv'
-    team_path = './data/team_info.csv'
-    game_teams_path = './data/game_teams_stats.csv'
+    game_path = './data/game_dummy.csv'
+    team_path = './data/team_info_dummy.csv'
+    game_teams_path = './data/game_teams_stats_dummy.csv'
 
     locations = {
       games: game_path,
       teams: team_path,
       game_teams: game_teams_path
     }
+    StatTracker.read_in_file(locations)
 
     assert_equal Game, StatTracker.from_csv(locations).game_line
   end
