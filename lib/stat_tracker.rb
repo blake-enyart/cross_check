@@ -1,21 +1,25 @@
+
 class StatTracker
+
+  attr_reader :games,
+              :teams,
+              :game_teams
 
   def initialize(games_data, teams_data, game_teams_data)
     @games = games_data
     @teams = teams_data
     @game_teams = game_teams_data
-    @game_stats = GameStats.new(@games,@teams,@game_teams)
-    @league_stats = LeagueStats.new(@games,@teams,@game_teams)
-    @team_stats = TeamStats.new(@games,@teams,@game_teams)
-    @season_stats = SeasonStats.new(@games,@teams,@game_teams)
+    # @game_stats = GameStats.new(@games,@teams,@game_teams)
+    # @league_stats = LeagueStats.new(@games,@teams,@game_teams)
+    # @team_stats = TeamStats.new(@games,@teams,@game_teams)
+    # @season_stats = SeasonStats.new(@games,@teams,@game_teams)
   end
 
   def self.from_csv(locations)
     games_data = self.read_game_file(locations[:games])
     teams_data = self.read_team_file(locations[:teams])
     game_teams_data = self.read_game_teams_file(locations[:game_teams])
-    stat_tracker = StatTracker.new(games_data, teams_data, game_teams_data)
-    return stat_tracker
+    StatTracker.new(games_data, teams_data, game_teams_data)
   end
 
   def self.read_game_file(game_file)
