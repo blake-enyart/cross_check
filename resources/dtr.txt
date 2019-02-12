@@ -1,0 +1,69 @@
+DTR Memo:
+
+Project: Cross Check
+Members: Glynnis, Blake, Erin
+Due: 2.20 @ Midnight
+Assessment: 2.21
+
+Goals & Expectations:
+
+A better command of GitHub and team collaboration
+Team management of git
+3’s across the rubric
+All team members feel comfortable and can explain aspects of the project
+
+
+Team Strengths & Collaboration Style:
+
+Pairin survey results seem compatible, emphasis on explaining the why, confidence in explanations.
+
+Strengths to Overcome Obstacles:
+
+We will work well together through our communication skills.
+
+
+Schedule Expectations:
+
+Morning/afternoon work-time
+Blake- no code Sundays, but available for questions
+
+Weekdays: 4p-6p, maybe Tuesday exception (Blake mentor 4p-5p)
+Saturday 16th: all day
+Sunday 17th: all day
+Monday 18th: coding break!
+
+Combination of group and alone work depending on needs
+
+
+Communication Expectations:
+Shared emails- calendar invite
+Slack
+Daily checkins @ 4p; 10 minute Stand-ups
+
+
+Abilities & Growth Expectations:
+Glynnis: needs time to understand methods
+Blake: teaching is his way of learning
+Erin: stop being intimidated by projects- white boarding
+
+
+Workload Expectations:
+See schedule and strengths
+Communicate when working later than scheduled times
+
+
+Workflow Expectations:
+Use Git-up to visually check git workflow
+Practice branching off branches, rebasing
+Pull request form in comments
+
+
+Project Management Tools:
+Waffle
+Gitup
+Pull request form (Mod 4)
+
+
+Feedback Expectations:
+Specific, actionable and kind
+As candid as possible (Blake when receiving)
