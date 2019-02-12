@@ -1,3 +1,5 @@
+# require './lib/class_helper'
+
 class Game
 
   attr_reader :game_id,
@@ -15,7 +17,7 @@ class Game
               :venue_time_zone_id,
               :venue_time_zone_offset,
               :venue_time_zone_tz
-              
+
   def initialize(row)
     @game_id = row[:game_id]
     @season = row[:season]
