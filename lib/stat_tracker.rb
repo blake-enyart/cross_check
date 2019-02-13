@@ -6,9 +6,9 @@ class StatTracker
               :game_teams
 
   def initialize(games_data, teams_data, game_teams_data)
-    @games = games_data
+    @games =
     @teams = teams_data
-    @game_teams = game_teams_data
+    @game_teams = GameTeam.all
     # @game_stats = GameStats.new(@games,@teams,@game_teams)
   end
 
@@ -16,7 +16,7 @@ class StatTracker
     games_data = read_game_file(locations[:games])
     teams_data = read_team_file(locations[:teams])
     game_teams_data = read_game_teams_file(locations[:game_teams])
-    StatTracker.new(games_data, teams_data, game_teams_data)
+    StatTracker.new
   end
 
   def self.read_in_csv(file_path)
@@ -35,6 +35,6 @@ class StatTracker
 
   def self.read_game_teams_file(game_teams_file)
     game_teams = read_in_csv(game_teams_file)
-    game_teams.map { |row| GameTeam.new(row) }
+    game_teams.map { |row| GameTeam.create(row) }
   end
 end
