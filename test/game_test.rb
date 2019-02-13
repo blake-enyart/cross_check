@@ -11,8 +11,8 @@ class GameTest < Minitest::Test
       teams: team_path,
       game_teams: game_teams_path
     }
-    @row = StatTracker.read_in_csv(locations[:games]).readline
-    @game = Game.new(@row)
+    row = StatTracker.read_in_csv(locations[:games]).readline
+    @game = Game.new(row)
   end
 
   def test_it_exists
