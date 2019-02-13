@@ -1,6 +1,5 @@
 "team_id","franchiseId","shortName","teamName","abbreviation","link"
+"1","23","New Jersey","Devils","NJD","/api/v1/teams/1"
 "6","6","Boston","Bruins","BOS","/api/v1/teams/6"
-
-"24","32","Anaheim","Ducks","ANA","/api/v1/teams/24"
-"20","21","Calgary","Flames","CGY","/api/v1/teams/20"
-"21","27","Colorado","Avalanche","COL","/api/v1/teams/21"
+"3","10","NY Rangers","Rangers","NYR","/api/v1/teams/3"
+"17","12","Detroit","Red Wings","DET","/api/v1/teams/17"
