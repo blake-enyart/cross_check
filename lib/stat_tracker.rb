@@ -1,4 +1,3 @@
-
 class StatTracker
 
   attr_reader :games,
