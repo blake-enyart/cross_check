@@ -1,4 +1,4 @@
-'./test/test_helper'
+require './test/test_helper'
 
 class GameTeamTest < Minitest::Test
 
