@@ -105,4 +105,8 @@ class StatTrackerTest < Minitest::Test
     assert_equal expected, @stat_tracker.count_of_games_by_season
   end
 
+  def test_best_offense_returns_correct_team
+    
+    assert_equal 3, @stat_tracker.best_offense
+  end
 end

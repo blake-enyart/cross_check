@@ -14,7 +14,11 @@ class StatTracker
     @game_teams = game_teams_data
     @games_home = separate_home_and_away_games(game_teams_data)[0]
     @games_away = separate_home_and_away_games(game_teams_data)[1]
-    # @game_stats = GameStats.new(@games,@teams,@game_teams)
+    @teams_hash = group_by_team_id(teams_data)
+  end
+
+  def group_by_team_id(teams_data)
+    @game_teams.group_by { |row| row.team_id }
   end
 
   def separate_home_and_away_games(game_teams_data)
@@ -108,4 +112,9 @@ class StatTracker
     hash
   end
 
+
+  #League Statistics
+  def best_offense
+    
+  end
 end
