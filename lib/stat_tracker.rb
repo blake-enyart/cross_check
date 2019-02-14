@@ -48,14 +48,19 @@ class StatTracker
     blowout
   end
 
-  #def highest_total_score
-  #  total_score = 0
-  #  @games.each do |game|
-  #    total_score = (game.away_goals.to_i + game.home_goals.to_i)
-  #  end
-  #  total_score
-  #end
+  def highest_total_score
+    total_score = 0
+    @games.each do |game|
+      #require 'pry'; binding.pry
+      total_score = (game.away_goals.to_i + game.home_goals.to_i)
+      end
+    total_score
+  end
 
   def lowest_total_score
-  end 
+  #  lowest_score = 0
+  #  @games.each do |game|
+  #    lowest_score = (game.)
+  #  end
+  end
 end
