@@ -39,11 +39,18 @@ class StatTracker
     game_teams.map { |row| GameTeam.new(row) }
   end
 
-  #Erin's Methods
   def count_of_teams
     teams.length
   end
 
-  ########
-
+  def biggest_blowout
+    blowout = 0
+    @games.each do |game|
+      difference = (game.away_goals.to_i - game.home_goals.to_i).abs
+      if difference > blowout
+        blowout = difference
+      end
+    end
+    blowout
+  end
 end
