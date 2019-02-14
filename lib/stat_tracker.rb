@@ -1,3 +1,5 @@
+require './lib/class_helper'
+
 class StatTracker
 
   attr_reader :games,
@@ -35,6 +37,10 @@ class StatTracker
   def self.read_game_teams_file(game_teams_file)
     game_teams = read_in_csv(game_teams_file)
     game_teams.map { |row| GameTeam.new(row) }
+  end
+
+  def count_of_teams
+    teams.length
   end
 
   def biggest_blowout
