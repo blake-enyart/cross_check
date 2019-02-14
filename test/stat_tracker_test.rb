@@ -109,4 +109,9 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal 'Bruins', @stat_tracker.best_offense
   end
+
+  def test_worst_offense_returns_correct_team
+
+    assert_equal 'Red Wings', @stat_tracker.worse_offense
+  end
 end
