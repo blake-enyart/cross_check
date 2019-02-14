@@ -78,8 +78,13 @@ class StatTrackerTest < Minitest::Test
     assert_equal 5, @stat_tracker.biggest_blowout
   end
 
-  def test_highest_total_score_returned
+  #def test_highest_total_score_returned
+#
+  #  assert_equal 9, @stat_tracker.highest_total_score
+  #end
 
-    assert_equal 9, @stat_tracker.highest_total_score
+  def test_lowest_total_score_returned
+
+    assert_equal 1, @stat_tracker.lowest_total_score
   end
 end

@@ -55,4 +55,7 @@ class StatTracker
   #  end
   #  total_score
   #end
+
+  def lowest_total_score
+  end 
 end
