@@ -26,7 +26,7 @@ class StatTrackerTest < Minitest::Test
       teams: team_path,
       game_teams: game_teams_path
     }
-    stat_tracker = StatTracker.new(locations[:games], locations[:teams], locations[:game_teams])
+    stat_tracker = StatTracker.from_csv(locations)
 
     assert_instance_of StatTracker, stat_tracker
   end
@@ -76,5 +76,10 @@ class StatTrackerTest < Minitest::Test
   def test_biggest_blowout_returns_correct_difference
 
     assert_equal 5, @stat_tracker.biggest_blowout
+  end
+
+  def test_percentage_home_wins_returns_correctly
+
+    assert_equal 63.16, @stat_tracker.percentage_home_wins
   end
 end
