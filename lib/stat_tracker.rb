@@ -71,9 +71,20 @@ class StatTracker
     @games_home.each do |home_game|
       number_of_wins += 1 if home_game.won == "TRUE"
     end
+    
+    percent_wins = (number_of_wins/number_of_games)*100
+    percent_wins.round(2)
+  end
+
+  def percentage_visitor_wins
+    number_of_games = @games_away.size.to_f
+    number_of_wins = 0
+    @games_away.each do |away_game|
+      number_of_wins += 1 if away_game.won == "TRUE"
+    end
 
     percent_wins = (number_of_wins/number_of_games)*100
     percent_wins.round(2)
   end
-  
+
 end
