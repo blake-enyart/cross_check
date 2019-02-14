@@ -47,4 +47,12 @@ class StatTracker
     end
     blowout
   end
+
+  #def highest_total_score
+  #  total_score = 0
+  #  @games.each do |game|
+  #    total_score = (game.away_goals.to_i + game.home_goals.to_i)
+  #  end
+  #  total_score
+  #end
 end

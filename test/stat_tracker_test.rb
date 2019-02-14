@@ -16,7 +16,7 @@ class StatTrackerTest < Minitest::Test
     @stat_tracker = StatTracker.from_csv(@locations)
   end
 
-  def test_it_exist
+  def test_it_exists
     game_path = './data/samples/game.csv'
     team_path = './data/samples/team_info.csv'
     game_teams_path = './data/samples/game_teams_stats.csv'
@@ -76,5 +76,10 @@ class StatTrackerTest < Minitest::Test
   def test_biggest_blowout_returns_correct_difference
 
     assert_equal 5, @stat_tracker.biggest_blowout
+  end
+
+  def test_highest_total_score_returned
+
+    assert_equal 9, @stat_tracker.highest_total_score
   end
 end
