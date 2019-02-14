@@ -89,6 +89,16 @@ class StatTrackerTest < Minitest::Test
     assert_equal 5, @stat_tracker.biggest_blowout
   end
 
+  def test_highest_total_score_returned
+
+    assert_equal 9, @stat_tracker.highest_total_score
+  end
+
+  def test_lowest_total_score_returned
+
+    assert_equal 1, @stat_tracker.lowest_total_score
+  end
+  
   def test_percentage_home_wins_returns_correctly
 
     assert_equal 63.16, @stat_tracker.percentage_home_wins

@@ -94,6 +94,21 @@ class StatTracker
     blowout
   end
 
+  def highest_total_score
+    total_score = []
+    @games.each do |game|
+      total_score << (game.away_goals.to_i + game.home_goals.to_i)
+    end
+    total_score.max
+  end
+
+  def lowest_total_score
+    total_score = []
+    @games.each do |game|
+      total_score << (game.away_goals.to_i + game.home_goals.to_i)
+    end
+    total_score.min
+
   def percentage_home_wins
     number_of_games = @games_home.size.to_f
     number_of_wins = 0
@@ -131,6 +146,13 @@ class StatTracker
     best_team_id = hash.max_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(best_team_id)
   end
+    
+  def worse_offense
+    hash = all_goals_per_team
+
+    worst_team_id = hash.min_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(worst_team_id)
+  end
 
   def all_goals_per_team
     hash = {}
@@ -142,12 +164,5 @@ class StatTracker
       hash[team_id] = team_goals
     end
     hash
-  end
-
-  def worse_offense
-    hash = all_goals_per_team
-
-    worst_team_id = hash.min_by { |team_id, team_goals| team_goals }[0]
-    convert_team_id_and_team_name(worst_team_id)
   end
 end
