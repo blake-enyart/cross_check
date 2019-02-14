@@ -2,6 +2,19 @@ require './test/test_helper'
 
 class StatTrackerTest < Minitest::Test
 
+  def setup
+    game_path = './data/samples/game.csv'
+    team_path = './data/samples/team_info.csv'
+    game_teams_path = './data/samples/game_teams_stats.csv'
+
+    locations = {
+      games: game_path,
+      teams: team_path,
+      game_teams: game_teams_path
+    }
+    @stat_tracker = StatTracker.new(locations[:games], locations[:teams], locations[:game_teams])
+
+  end
 
   def test_it_exist
     game_path = './data/samples/game.csv'
@@ -59,4 +72,20 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal GameTeam, StatTracker.from_csv(locations).game_teams[0].class
   end
+
+#Erin's Methods
+def test_it_gets_count_of_teams
+
+  assert_equal 4, @stat_tracker.count_of_teams
+end
+
+# count_of_teams
+# Total number of teams in the data.
+# Integer
+
+
+
+
+######
+
 end

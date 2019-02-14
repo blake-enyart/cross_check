@@ -1,3 +1,5 @@
+require './lib/class_helper'
+
 class StatTracker
 
   attr_reader :games,
