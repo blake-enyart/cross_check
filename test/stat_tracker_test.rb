@@ -59,4 +59,22 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal GameTeam, StatTracker.from_csv(locations).game_teams[0].class
   end
+
+# Erin
+  def test_it_can_calculate_average_goals_per_game
+    game_path = './data/samples/game.csv'
+    team_path = './data/samples/team_info.csv'
+    game_teams_path = './data/samples/game_teams_stats.csv'
+
+    locations = {
+      games: game_path,
+      teams: team_path,
+      game_teams: game_teams_path
+    }
+    stat_tracker = StatTracker.from_csv(locations)
+
+    assert_equal stat_tracker.average_goals_per_game
+  end
+####
+
 end
