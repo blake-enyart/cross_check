@@ -32,6 +32,7 @@ class StatTrackerTest < Minitest::Test
       game_teams: game_teams_path
     }
 
+    stat_tracker = StatTracker.from_csv(locations)
     assert_equal Game, StatTracker.from_csv(locations).games[0].class
   end
 
@@ -87,4 +88,21 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal 5, @stat_tracker.biggest_blowout
   end
+
+  def test_percentage_home_wins_returns_correctly
+
+    assert_equal 63.16, @stat_tracker.percentage_home_wins
+  end
+
+  def test_percentage_visitor_wins_returns_correctly
+
+    assert_equal 40.0, @stat_tracker.percentage_visitor_wins
+  end
+
+  def test_count_of_games_by_season_returns_correct_hash
+    expected = {'20122013' => 8, '20132014' => 12}
+
+    assert_equal expected, @stat_tracker.count_of_games_by_season
+  end
+
 end
