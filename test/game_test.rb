@@ -6,7 +6,7 @@ class GameTest < Minitest::Test
     game_path = './data/samples/game.csv'
     team_path = './data/samples/team_info.csv'
     game_teams_path = './data/samples/game_teams_stats.csv'
-    
+
     locations = {
       games: game_path,
       teams: team_path,
@@ -27,8 +27,8 @@ class GameTest < Minitest::Test
     assert_equal "2013-05-16", @game.date_time
     assert_equal "3", @game.away_team_id
     assert_equal "6", @game.home_team_id
-    assert_equal "2", @game.away_goals
-    assert_equal "3", @game.home_goals
+    assert_equal 2, @game.away_goals
+    assert_equal 3, @game.home_goals
     assert_equal "home win OT", @game.outcome
     assert_equal "left", @game.home_rink_side_start
     assert_equal "TD Garden", @game.venue

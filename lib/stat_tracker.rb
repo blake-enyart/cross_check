@@ -14,7 +14,11 @@ class StatTracker
     @game_teams = game_teams_data
     @games_home = separate_home_and_away_games(game_teams_data)[0]
     @games_away = separate_home_and_away_games(game_teams_data)[1]
-    # @game_stats = GameStats.new(@games,@teams,@game_teams)
+    @teams_hash = group_by_team_id(teams_data)
+  end
+
+  def group_by_team_id(teams_data)
+    @game_teams.group_by { |row| row.team_id }
   end
 
   def separate_home_and_away_games(game_teams_data)
@@ -28,6 +32,18 @@ class StatTracker
       end
     end
     [home_games, away_games]
+  end
+
+  def convert_team_id_and_team_name(team)
+    name = nil
+    @teams.each do |row|
+      if team == row.team_id
+        name = row.team_name
+      elsif team == row.team_name
+        name = row.team_id
+      end
+    end
+    name
   end
 
   def self.from_csv(locations)
@@ -108,4 +124,30 @@ class StatTracker
     hash
   end
 
+  #League Statistics
+  def best_offense
+    hash = all_goals_per_team
+
+    best_team_id = hash.max_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(best_team_id)
+  end
+
+  def all_goals_per_team
+    hash = {}
+    @teams_hash.each do |team_id, games_array|
+      team_goals = 0
+      games_array.each do |game|
+        team_goals += game.goals.to_i
+      end
+      hash[team_id] = team_goals
+    end
+    hash
+  end
+
+  def worse_offense
+    hash = all_goals_per_team
+
+    worst_team_id = hash.min_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(worst_team_id)
+  end
 end

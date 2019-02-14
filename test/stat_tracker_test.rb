@@ -17,7 +17,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_exist
-    
+
     assert_instance_of StatTracker, @stat_tracker
   end
 
@@ -80,7 +80,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_gets_count_of_teams
-    
+
     assert_equal 4, @stat_tracker.count_of_teams
   end
 
@@ -105,4 +105,13 @@ class StatTrackerTest < Minitest::Test
     assert_equal expected, @stat_tracker.count_of_games_by_season
   end
 
+  def test_best_offense_returns_correct_team
+
+    assert_equal 'Bruins', @stat_tracker.best_offense
+  end
+
+  def test_worst_offense_returns_correct_team
+
+    assert_equal 'Red Wings', @stat_tracker.worse_offense
+  end
 end
