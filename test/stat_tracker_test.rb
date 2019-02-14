@@ -87,4 +87,11 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal 40.0, @stat_tracker.percentage_visitor_wins
   end
+
+  def test_count_of_games_by_season_returns_correct_hash
+    expected = {'20122013' => 8, '20132014' => 12}
+
+    assert_equal expected, @stat_tracker.count_of_games_by_season
+  end
+
 end
