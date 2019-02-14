@@ -1,3 +1,5 @@
+require './lib/class_helper'
+
 class StatTracker
 
   attr_reader :games,
@@ -52,6 +54,17 @@ class StatTracker
   def self.read_game_teams_file(game_teams_file)
     game_teams = read_in_csv(game_teams_file)
     game_teams.map { |row| GameTeam.new(row) }
+  end
+
+  def average_goals_per_game
+    average = games.sum do |game|
+      (game.away_goals + game.home_goals) / games.count.to_f
+    end
+    average.round(2)
+  end
+
+  def count_of_teams
+    teams.length
   end
 
   def biggest_blowout
