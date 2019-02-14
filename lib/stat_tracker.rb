@@ -75,4 +75,5 @@ class StatTracker
     percent_wins = (number_of_wins/number_of_games)*100
     percent_wins.round(2)
   end
+  
 end
