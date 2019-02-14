@@ -71,7 +71,7 @@ class StatTracker
     @games_home.each do |home_game|
       number_of_wins += 1 if home_game.won == "TRUE"
     end
-    
+
     percent_wins = (number_of_wins/number_of_games)*100
     percent_wins.round(2)
   end
@@ -85,6 +85,14 @@ class StatTracker
 
     percent_wins = (number_of_wins/number_of_games)*100
     percent_wins.round(2)
+  end
+
+  def count_of_games_by_season
+    hash = @games.group_by { |game| game.season }
+    hash.each do |season, game_array|
+      hash[season] = game_array.count
+    end
+    hash
   end
 
 end
