@@ -1,5 +1,3 @@
-# require './lib/class_helper'
-
 class Game
 
   attr_reader :game_id,

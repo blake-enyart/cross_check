@@ -1,3 +1,5 @@
+require './lib/class_helper'
+
 class StatTracker
 
   attr_reader :games,
@@ -37,7 +39,6 @@ class StatTracker
     game_teams.map { |row| GameTeam.new(row) }
   end
 
-  # Erin
   def average_goals_per_game
     average = games.sum do |game|
       (game.away_goals + game.home_goals) / games.count.to_f
@@ -45,6 +46,18 @@ class StatTracker
     average.round(2)
   end
 
-  ###
+  def count_of_teams
+    teams.length
+  end
 
+  def biggest_blowout
+    blowout = 0
+    @games.each do |game|
+      difference = (game.away_goals.to_i - game.home_goals.to_i).abs
+      if difference > blowout
+        blowout = difference
+      end
+    end
+    blowout
+  end
 end
