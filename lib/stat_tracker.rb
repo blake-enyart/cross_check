@@ -38,4 +38,12 @@ class StatTracker
     game_teams = read_in_csv(game_teams_file)
     game_teams.map { |row| GameTeam.new(row) }
   end
+
+  #Erin's Methods
+  def count_of_teams
+    teams.length
+  end
+
+  ########
+
 end

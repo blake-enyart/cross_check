@@ -12,26 +12,15 @@ class StatTrackerTest < Minitest::Test
       teams: team_path,
       game_teams: game_teams_path
     }
-    @stat_tracker = StatTracker.new(locations[:games], locations[:teams], locations[:game_teams])
-
+    @stat_tracker = StatTracker.from_csv(locations)
   end
 
   def test_it_exist
-    game_path = './data/samples/game.csv'
-    team_path = './data/samples/team_info.csv'
-    game_teams_path = './data/samples/game_teams_stats.csv'
-
-    locations = {
-      games: game_path,
-      teams: team_path,
-      game_teams: game_teams_path
-    }
-    stat_tracker = StatTracker.new(locations[:games], locations[:teams], locations[:game_teams])
-
-    assert_instance_of StatTracker, stat_tracker
+    assert_instance_of StatTracker, @stat_tracker
   end
 
   def test_from_csv_stores_array_of_game_objects
+    # skip
     game_path = './data/samples/game.csv'
     team_path = './data/samples/team_info.csv'
     game_teams_path = './data/samples/game_teams_stats.csv'
@@ -46,9 +35,10 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_from_csv_stores_array_of_team_objects
-    game_path = './data/game_dummy.csv'
-    team_path = './data/team_info_dummy.csv'
-    game_teams_path = './data/game_teams_stats_dummy.csv'
+    # skip
+    game_path = './data/samples/game.csv'
+    team_path = './data/samples/team_info.csv'
+    game_teams_path = './data/samples/game_teams_stats.csv'
 
     locations = {
       games: game_path,
@@ -60,6 +50,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_from_csv_stores_array_of_game_team_objects
+    # skip
     game_path = './data/game_dummy.csv'
     team_path = './data/team_info_dummy.csv'
     game_teams_path = './data/game_teams_stats_dummy.csv'
@@ -75,15 +66,8 @@ class StatTrackerTest < Minitest::Test
 
 #Erin's Methods
 def test_it_gets_count_of_teams
-
   assert_equal 4, @stat_tracker.count_of_teams
 end
-
-# count_of_teams
-# Total number of teams in the data.
-# Integer
-
-
 
 
 ######
