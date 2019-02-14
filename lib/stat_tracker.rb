@@ -126,6 +126,13 @@ class StatTracker
 
   #League Statistics
   def best_offense
+    hash = all_goals_per_team
+
+    best_team_id = hash.max_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(best_team_id)
+  end
+
+  def all_goals_per_team
     hash = {}
     @teams_hash.each do |team_id, games_array|
       team_goals = 0
@@ -134,9 +141,13 @@ class StatTracker
       end
       hash[team_id] = team_goals
     end
-    best_team_id = hash.max_by { |team_id, team_goals| team_goals }[0]
-    convert_team_id_and_team_name(best_team_id)
+    hash
   end
 
+  def worse_offense
+    hash = all_goals_per_team
 
+    worst_team_id = hash.min_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(worst_team_id)
+  end
 end
