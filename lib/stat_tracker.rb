@@ -34,6 +34,18 @@ class StatTracker
     [home_games, away_games]
   end
 
+  def convert_team_id_and_team_name(team)
+    name = nil
+    @teams.each do |row|
+      if team == row.team_id
+        name = row.team_name
+      elsif team == row.team_name
+        name = row.team_id
+      end
+    end
+    name
+  end
+
   def self.from_csv(locations)
     games_data = read_game_file(locations[:games])
     teams_data = read_team_file(locations[:teams])
@@ -126,15 +138,5 @@ class StatTracker
     convert_team_id_and_team_name(best_team_id)
   end
 
-  def convert_team_id_and_team_name(team)
-    name = nil
-    @teams.each do |row|
-      if team == row.team_id
-        name = row.team_name
-      elsif team == row.team_name
-        name = row.team_id
-      end
-    end
-    name
-  end
+
 end
