@@ -36,4 +36,15 @@ class StatTracker
     game_teams = read_in_csv(game_teams_file)
     game_teams.map { |row| GameTeam.new(row) }
   end
+
+  def biggest_blowout
+    blowout = 0
+    @games.each do |game|
+      difference = (game.away_goals.to_i - game.home_goals.to_i).abs
+      if difference > blowout
+        blowout = difference
+      end
+    end
+    blowout
+  end
 end
