@@ -73,7 +73,22 @@ class StatTrackerTest < Minitest::Test
     }
     stat_tracker = StatTracker.from_csv(locations)
 
-    assert_equal stat_tracker.average_goals_per_game
+    assert_equal "TBD", stat_tracker.average_goals_per_game
+  end
+
+  def test_it_can_count_games_across_all_seasons
+    game_path = './data/samples/game.csv'
+    team_path = './data/samples/team_info.csv'
+    game_teams_path = './data/samples/game_teams_stats.csv'
+
+    locations = {
+      games: game_path,
+      teams: team_path,
+      game_teams: game_teams_path
+    }
+    stat_tracker = StatTracker.from_csv(locations)
+
+    assert_equal 20, stat_tracker.count_of_games_across_all_seasons
   end
 ####
 

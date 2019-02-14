@@ -38,7 +38,15 @@ class StatTracker
   end
 
   # Erin
-  
+  def average_goals_per_game
+    # game.away_goals + game.home_goals / total_number_of_games
+    # sum = 103, 20 games
+    # average_goals_per_game
+    # Average number of goals scored in a game across all seasons
+    # (rounded to the nearest 100th)	Float
+
+    # count_of_games_across_all_seasons
+  end
 
 
   ###
