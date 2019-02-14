@@ -48,6 +48,10 @@ class StatTracker
     # count_of_games_across_all_seasons
   end
 
+  def count_of_games_across_all_seasons
+    games.count
+  end
+
 
   ###
 
