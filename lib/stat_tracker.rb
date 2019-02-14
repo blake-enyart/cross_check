@@ -112,9 +112,29 @@ class StatTracker
     hash
   end
 
-
   #League Statistics
   def best_offense
-    
+    hash = {}
+    @teams_hash.each do |team_id, games_array|
+      team_goals = 0
+      games_array.each do |game|
+        team_goals += game.goals.to_i
+      end
+      hash[team_id] = team_goals
+    end
+    best_team_id = hash.max_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(best_team_id)
+  end
+
+  def convert_team_id_and_team_name(team)
+    name = nil
+    @teams.each do |row|
+      if team == row.team_id
+        name = row.team_name
+      elsif team == row.team_name
+        name = row.team_id
+      end
+    end
+    name
   end
 end
