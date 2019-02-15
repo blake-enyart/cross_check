@@ -70,15 +70,18 @@ class StatTracker
     game_teams.map { |row| GameTeam.new(row) }
   end
 
-  def average_goals_per_game
-    average = games.sum do |game|
-      (game.away_goals + game.home_goals) / games.count.to_f
+  def total_goals(games_array)
+    games_array.sum do |game|
+      (game.away_goals + game.home_goals).to_f
     end
-    average.round(2)
+  end
+
+  def average_goals_per_game
+    (total_goals(@games)/@games.count).round(2)
   end
 
   def count_of_teams
-    teams.length
+    @teams.length
   end
 
   def biggest_blowout
@@ -136,6 +139,20 @@ class StatTracker
       hash[season] = game_array.count
     end
     hash
+  end
+
+  def average_goals_per_season
+    goals_per_season_hash = {}
+    games_by_season.each do |season_key, games_array|
+      goals_per_season_hash[season_key] = (total_goals(games_array) / games_array.count).round(2)
+    end
+    goals_per_season_hash
+  end
+
+  def games_by_season
+    @games.group_by do |game|
+      game.season
+    end
   end
 
   #League Statistics
