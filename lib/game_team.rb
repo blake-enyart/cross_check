@@ -23,14 +23,14 @@ class GameTeam
     @won = row[:won]
     @settled_in = row[:settled_in]
     @head_coach = row[:head_coach]
-    @goals = row[:goals]
-    @shots = row[:shots]
-    @hits = row[:hits]
+    @goals = row[:goals].to_i
+    @shots = row[:shots].to_i
+    @hits = row[:hits].to_i
     @pim = row[:pim]
-    @powerplayopportunities = row[:powerplayopportunities]
-    @powerplaygoals = row[:powerplaygoals]
-    @faceoffwinpercentage = row[:faceoffwinpercentage]
-    @giveaways = row[:giveaways]
-    @takeaways = row[:takeaways]
+    @powerplayopportunities = row[:powerplayopportunities].to_i
+    @powerplaygoals = row[:powerplaygoals].to_i
+    @faceoffwinpercentage = row[:faceoffwinpercentage].to_f
+    @giveaways = row[:giveaways].to_i
+    @takeaways = row[:takeaways].to_i
   end
 end

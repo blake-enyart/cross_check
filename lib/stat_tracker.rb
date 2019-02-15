@@ -213,4 +213,38 @@ class StatTracker
     worst_team_id = sorted_with_scores.min_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(worst_team_id)
   end
+
+  def winningest_team
+    win_tracker = @teams_hash
+    win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
+
+    game_grouping = @game_teams.group_by { |row| row.game_id }
+    game_grouping.each do |game_id, game_array|
+      outcome = win_determination(game_array)
+      if outcome
+        win_tracker[outcome[0]] += outcome[1]
+      end
+    end
+
+    best_team_id = win_tracker.max_by { |team_id, wins| wins }[0]
+    convert_team_id_and_team_name(best_team_id)
+  end
+
+  def win_determination(game_array)
+    if game_array.length == 2
+      if game_array[0].hoa == 'home'
+        home_team = game_array[0]
+        away_team = game_array[1]
+      else
+        home_team = game_array[1]
+        away_team = game_array[0]
+      end
+
+      if home_team.goals > away_team.goals
+        [home_team.team_id, 1]
+      else
+        [away_team.team_id, 1]
+      end
+    end
+  end
 end
