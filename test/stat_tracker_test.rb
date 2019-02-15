@@ -98,7 +98,7 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal 1, @stat_tracker.lowest_total_score
   end
-  
+
   def test_percentage_home_wins_returns_correctly
 
     assert_equal 63.16, @stat_tracker.percentage_home_wins
@@ -123,5 +123,10 @@ class StatTrackerTest < Minitest::Test
   def test_worst_offense_returns_correct_team
 
     assert_equal 'Red Wings', @stat_tracker.worse_offense
+  end
+
+  def test_highest_scoring_visitor_returns_correctly
+
+    assert_equal "", @stat_tracker.highest_scoring_visitor
   end
 end
