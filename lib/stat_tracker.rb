@@ -121,4 +121,10 @@ class StatTracker
     games_by_season
   end
 
+  def games_by_season
+    @games.group_by do |game|
+      game.season
+    end
+  end
+
 end

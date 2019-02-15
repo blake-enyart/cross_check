@@ -75,4 +75,9 @@ class StatTrackerTest < Minitest::Test
     assert_equal 103, @stat_tracker.total_goals(@stat_tracker.games)
   end
 
+  def test_it_can_get_games_by_season
+    assert_equal (['20122013', '20132014']), @stat_tracker.games_by_season.keys
+    assert_equal 8, @stat_tracker.games_by_season['20122013'].count
+  end
+
 end
