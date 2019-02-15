@@ -56,11 +56,14 @@ class StatTracker
     game_teams.map { |row| GameTeam.new(row) }
   end
 
-  def average_goals_per_game
-    average = games.sum do |game|
-      (game.away_goals + game.home_goals) / games.count.to_f
+  def total_goals(games_array)
+    games_array.sum do |game|
+      (game.away_goals + game.home_goals)
     end
-    average.round(2)
+  end
+
+  def average_goals_per_game
+    (total_goals(games)/games.count.to_f).round(2)
   end
 
   def count_of_teams
