@@ -1,5 +1,3 @@
-require './lib/class_helper'
-
 class StatTracker
 
   attr_reader :games,
@@ -14,11 +12,11 @@ class StatTracker
     @game_teams = game_teams_data
     @games_home = separate_home_and_away_games(game_teams_data)[0]
     @games_away = separate_home_and_away_games(game_teams_data)[1]
-    @teams_hash = group_by_team_id(teams_data)
+    @teams_hash = group_by_team_id(game_teams_data)
   end
 
-  def group_by_team_id(teams_data)
-    @game_teams.group_by { |row| row.team_id }
+  def group_by_team_id(game_teams_data)
+    game_teams_data.group_by { |row| row.team_id }
   end
 
   def separate_home_and_away_games(game_teams_data)
@@ -108,6 +106,7 @@ class StatTracker
       total_score << (game.away_goals.to_i + game.home_goals.to_i)
     end
     total_score.min
+  end
 
   def percentage_home_wins
     number_of_games = @games_home.size.to_f
@@ -141,22 +140,22 @@ class StatTracker
 
   #League Statistics
   def best_offense
-    hash = all_goals_per_team
+    hash = all_goals_per_team(@teams_hash)
 
     best_team_id = hash.max_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(best_team_id)
   end
-    
+
   def worse_offense
-    hash = all_goals_per_team
+    hash = all_goals_per_team(@teams_hash)
 
     worst_team_id = hash.min_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(worst_team_id)
   end
 
-  def all_goals_per_team
+  def all_goals_per_team(teams_hash)
     hash = {}
-    @teams_hash.each do |team_id, games_array|
+    teams_hash.each do |team_id, games_array|
       team_goals = 0
       games_array.each do |game|
         team_goals += game.goals.to_i
@@ -164,5 +163,37 @@ class StatTracker
       hash[team_id] = team_goals
     end
     hash
+  end
+
+  def highest_scoring_visitor
+    sorted_away_games = group_by_team_id(@games_away)
+    sorted_with_scores = all_goals_per_team(sorted_away_games)
+
+    best_team_id = sorted_with_scores.max_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(best_team_id)
+  end
+
+  def highest_scoring_home_team
+    sorted_home_games = group_by_team_id(@games_home)
+    sorted_with_scores = all_goals_per_team(sorted_home_games)
+
+    best_team_id = sorted_with_scores.max_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(best_team_id)
+  end
+
+  def lowest_scoring_visitor
+    sorted_away_games = group_by_team_id(@games_away)
+    sorted_with_scores = all_goals_per_team(sorted_away_games)
+
+    worst_team_id = sorted_with_scores.min_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(worst_team_id)
+  end
+
+  def lowest_scoring_home_team
+    sorted_home_games = group_by_team_id(@games_home)
+    sorted_with_scores = all_goals_per_team(sorted_home_games)
+
+    worst_team_id = sorted_with_scores.min_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(worst_team_id)
   end
 end
