@@ -16,6 +16,7 @@ class StatTrackerTest < Minitest::Test
     @stat_tracker = StatTracker.from_csv(@locations)
   end
 
+
   def test_it_exists
 
     assert_instance_of StatTracker, @stat_tracker
@@ -23,7 +24,7 @@ class StatTrackerTest < Minitest::Test
 
   def test_from_csv_stores_array_of_game_objects
 
-    assert_equal Game, StatTracker.from_csv(@locations).games[0].class
+    assert_equal Game, StatTracker.from_csv(locations).games[0].class
   end
 
   def test_from_csv_stores_array_of_team_objects
@@ -49,6 +50,16 @@ class StatTrackerTest < Minitest::Test
   def test_biggest_blowout_returns_correct_difference
 
     assert_equal 5, @stat_tracker.biggest_blowout
+  end
+
+  def test_highest_total_score_returned
+
+    assert_equal 9, @stat_tracker.highest_total_score
+  end
+
+  def test_lowest_total_score_returned
+
+    assert_equal 1, @stat_tracker.lowest_total_score
   end
 
   def test_percentage_home_wins_returns_correctly
@@ -80,4 +91,33 @@ class StatTrackerTest < Minitest::Test
     assert_equal 8, @stat_tracker.games_by_season['20122013'].count
   end
 
+  def test_best_offense_returns_correct_team
+
+    assert_equal 'Bruins', @stat_tracker.best_offense
+  end
+
+  def test_worst_offense_returns_correct_team
+
+    assert_equal 'Red Wings', @stat_tracker.worse_offense
+  end
+
+  def test_highest_scoring_visitor_returns_correctly
+
+    assert_equal "Bruins", @stat_tracker.highest_scoring_visitor
+  end
+
+  def test_highest_scoring_home_team_returns_correctly
+
+    assert_equal "Bruins", @stat_tracker.highest_scoring_home_team
+  end
+
+  def test_lowest_scoring_visitor_returns_correctly
+
+    assert_equal "Red Wings", @stat_tracker.lowest_scoring_visitor
+  end
+
+  def test_lowest_scoring_home_team_returns_correctly
+
+    assert_equal "Reg Wing", @stat_tracker.lowest_scoring_home_team
+  end
 end
