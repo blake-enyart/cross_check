@@ -67,4 +67,8 @@ class StatTrackerTest < Minitest::Test
     assert_equal expected, @stat_tracker.count_of_games_by_season
   end
 
+  def test_it_can_calculate_average_goals_by_season
+    assert_equal ({"20122013"=>5.5, "20132014"=>4.92}), @stat_tracker.average_goals_per_season
+  end
+
 end

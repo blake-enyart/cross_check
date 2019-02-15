@@ -108,4 +108,17 @@ class StatTracker
     hash
   end
 
+  def average_goals_per_season
+    games_by_season = games.group_by do |game|
+      game.season
+    end
+    games_by_season.each do |season_key, games_array|
+      total_goals = games_array.sum do |game|
+        (game.away_goals + game.home_goals).to_f
+      end
+      games_by_season[season_key] = (total_goals / games_array.count).round(2)
+    end
+    games_by_season
+  end
+
 end
