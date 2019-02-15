@@ -4,16 +4,7 @@ require './test/test_helper'
 class TeamTest < Minitest::Test
 
   def setup
-    game_path = './data/samples/game.csv'
-    team_path = './data/samples/team_info.csv'
-    game_teams_path = './data/samples/game_teams_stats.csv'
 
-    locations = {
-      games: game_path,
-      teams: team_path,
-      game_teams: game_teams_path
-    }
-    row = StatTracker.read_in_csv(locations[:teams]).readline
     @team = Team.new(team_id: "1", franchiseid:"23", shortname:"New Jersey", teamname:"Devils", abbreviation:"NJD", link:"/api/v1/teams/1")
   end
 

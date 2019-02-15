@@ -32,7 +32,6 @@ class StatTrackerTest < Minitest::Test
       game_teams: game_teams_path
     }
 
-    stat_tracker = StatTracker.from_csv(locations)
     assert_equal Game, StatTracker.from_csv(locations).games[0].class
   end
 
@@ -127,6 +126,21 @@ class StatTrackerTest < Minitest::Test
 
   def test_highest_scoring_visitor_returns_correctly
 
-    assert_equal "", @stat_tracker.highest_scoring_visitor
+    assert_equal "Bruins", @stat_tracker.highest_scoring_visitor
+  end
+
+  def test_highest_scoring_home_team_returns_correctly
+
+    assert_equal "Bruins", @stat_tracker.highest_scoring_home_team
+  end
+
+  def test_lowest_scoring_visitor_returns_correctly
+
+    assert_equal "Red Wings", @stat_tracker.lowest_scoring_visitor
+  end
+
+  def test_lowest_scoring_home_team_returns_correctly
+
+    assert_equal "Reg Wing", @stat_tracker.lowest_scoring_home_team
   end
 end

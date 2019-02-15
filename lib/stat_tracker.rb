@@ -1,5 +1,3 @@
-require './lib/class_helper'
-
 class StatTracker
 
   attr_reader :games,
@@ -142,22 +140,22 @@ class StatTracker
 
   #League Statistics
   def best_offense
-    hash = all_goals_per_team
+    hash = all_goals_per_team(@teams_hash)
 
     best_team_id = hash.max_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(best_team_id)
   end
 
   def worse_offense
-    hash = all_goals_per_team
+    hash = all_goals_per_team(@teams_hash)
 
     worst_team_id = hash.min_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(worst_team_id)
   end
 
-  def all_goals_per_team
+  def all_goals_per_team(teams_hash)
     hash = {}
-    @teams_hash.each do |team_id, games_array|
+    teams_hash.each do |team_id, games_array|
       team_goals = 0
       games_array.each do |game|
         team_goals += game.goals.to_i
@@ -167,5 +165,35 @@ class StatTracker
     hash
   end
 
-  
+  def highest_scoring_visitor
+    sorted_away_games = group_by_team_id(@games_away)
+    sorted_with_scores = all_goals_per_team(sorted_away_games)
+
+    best_team_id = sorted_with_scores.max_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(best_team_id)
+  end
+
+  def highest_scoring_home_team
+    sorted_home_games = group_by_team_id(@games_home)
+    sorted_with_scores = all_goals_per_team(sorted_home_games)
+
+    best_team_id = sorted_with_scores.max_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(best_team_id)
+  end
+
+  def lowest_scoring_visitor
+    sorted_away_games = group_by_team_id(@games_away)
+    sorted_with_scores = all_goals_per_team(sorted_away_games)
+
+    worst_team_id = sorted_with_scores.min_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(worst_team_id)
+  end
+
+  def lowest_scoring_home_team
+    sorted_home_games = group_by_team_id(@games_home)
+    sorted_with_scores = all_goals_per_team(sorted_home_games)
+
+    worst_team_id = sorted_with_scores.min_by { |team_id, team_goals| team_goals }[0]
+    convert_team_id_and_team_name(worst_team_id)
+  end
 end
