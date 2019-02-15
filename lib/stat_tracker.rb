@@ -108,4 +108,12 @@ class StatTracker
     hash
   end
 
+  def method_name
+
+  end
+  # best_fans
+  # Name of the team with biggest difference between
+  # home and away win percentages.
+  # Return String
+
 end

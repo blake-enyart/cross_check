@@ -17,7 +17,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_exist
-    
+
     assert_instance_of StatTracker, @stat_tracker
   end
 
@@ -80,7 +80,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_gets_count_of_teams
-    
+
     assert_equal 4, @stat_tracker.count_of_teams
   end
 
@@ -103,6 +103,11 @@ class StatTrackerTest < Minitest::Test
     expected = {'20122013' => 8, '20132014' => 12}
 
     assert_equal expected, @stat_tracker.count_of_games_by_season
+  end
+
+  def test_it_can_find_team_with_best_fans
+
+    assert_equal "Bruins", @stat_tracker.best_fans
   end
 
 end
