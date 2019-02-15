@@ -143,4 +143,11 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal "Reg Wing", @stat_tracker.lowest_scoring_home_team
   end
+
+  def test_winningest_team_returns_correct_team
+
+    assert_equal "Bruins", @stat_tracker.winningest_team
+  end
+
+  end
 end
