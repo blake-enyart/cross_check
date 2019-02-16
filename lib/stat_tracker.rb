@@ -1,3 +1,5 @@
+require_relative './class_helper'
+
 class StatTracker
 
   attr_reader :games,
@@ -146,6 +148,48 @@ class StatTracker
     hash
   end
 
+
+  def best_fans
+    home_away_win_difference_hash = {}
+    group_game_teams_by_team_id.each do |team_id, game_teams|
+      total_home_games = game_teams.count do |game_team|
+        game_team.hoa == "home"
+      end
+      count_of_home_wins = game_teams.count do |game_team|
+        game_team.hoa == "home" && game_team.won == "TRUE"
+      end
+      total_away_games = game_teams.count do |game_team|
+        game_team.hoa == "away"
+      end
+      count_of_away_wins = game_teams.count do |game_team|
+        game_team.hoa == "away" && game_team.won == "TRUE"
+      end
+      home_win_percentage_by_team = count_of_home_wins.to_f / total_home_games.to_f
+      away_win_percentage_by_team = count_of_away_wins.to_f / total_away_games.to_f
+      home_away_win_difference = home_win_percentage_by_team - away_win_percentage_by_team
+      home_away_win_difference_hash[team_id] = home_away_win_difference
+    end
+      big_difference = home_away_win_difference_hash.select do |team_id, value|
+        value == home_away_win_difference_hash.values.max
+      end
+    team_id = big_difference.keys.first
+    team_object = @teams.find do |team|
+      team.team_id == team_id
+      # binding.pry
+    end
+    team_object.teamName
+  end
+
+  def group_game_teams_by_team_id
+    @game_teams.group_by do |game_team|
+      game_team.team_id
+    end
+  end
+  # Name of the team with biggest difference between
+  # home and away win percentages.
+  # Return String of team
+
+
   def average_goals_per_season
     goals_per_season_hash = {}
     games_by_season.each do |season_key, games_array|
@@ -267,34 +311,50 @@ class StatTracker
   end
 
   def best_season(team_id)
-  #   games_by_season = @games.group_by(&:season)
-  #   selected_games = {}
-  #
-  #   games_by_season.each do |season, games_array|
-  #     games_array.select! do |game|
-  #       game.away_team_id == team_id || game.home_team_id == team_id
-  #     end
-  #
-  #     game_id_array = []
-  #
-  #     games_array.each do |game|
-  #       if games_array.include?(game) == true
-  #         game_id_array << game.game_id
-  #       end
-  #     end
-  #
-  #     selected_games[season] = game_id_array
+  end
+  
+  def worst_fans
+    away_home_win_difference_hash = {}
+    group_game_teams_by_team_id.each do |team_id, game_teams|
+      total_home_games = game_teams.count do |game_team|
+        game_team.hoa == "home"
+      end
+      count_of_home_wins = game_teams.count do |game_team|
+        game_team.hoa == "home" && game_team.won == "TRUE"
+      end
+      total_away_games = game_teams.count do |game_team|
+        game_team.hoa == "away"
+      end
+      count_of_away_wins = game_teams.count do |game_team|
+        game_team.hoa == "away" && game_team.won == "TRUE"
+      end
+      home_win_percentage_by_team = count_of_home_wins.to_f / total_home_games.to_f
+      away_win_percentage_by_team = count_of_away_wins.to_f / total_away_games.to_f
+      away_home_win_difference = away_win_percentage_by_team - home_win_percentage_by_team
+      away_home_win_difference_hash[team_id] = away_home_win_difference
+    end
+    away_home_win_difference_hash 
+  end
+  # List of names of all teams with better away records
+  # than home records.
+  # Array
+  #     home_away_win_difference_hash[team_id] = home_away_win_difference
   #   end
-  #
-  #   game_grouping = @game_teams.group_by { |row| row.game_id }
-  #
-  #   selected_games.each do |season, game_id_array|
-  #     game_id_array.each do |game_id|
-  #       if
-  #       game_id = #game_team_pairs
-  #
-  #     selected_games[season] = game_team_pairs
-  #   game_grouping.select! { |game_id, games_pair| selected_games.include?(game_id) }
-  #   binding.pry
+  #     big_difference = home_away_win_difference_hash.select do |team_id, value|
+  #       value == home_away_win_difference_hash.values.max
+  #     end
+  #   team_id = big_difference.keys.first
+  #   team_object = @teams.find do |team|
+  #     team.team_id == team_id
+  #     # binding.pry
+  #   end
+  #   team_object.teamName
+  # end
+
+
+  def group_game_teams_by_team_id
+    @game_teams.group_by do |game_team|
+      game_team.team_id
+    end
   end
 end
