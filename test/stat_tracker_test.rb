@@ -16,7 +16,6 @@ class StatTrackerTest < Minitest::Test
     @stat_tracker = StatTracker.from_csv(@locations)
   end
 
-
   def test_it_exists
 
     assert_instance_of StatTracker, @stat_tracker
@@ -150,7 +149,7 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal "20122013", @stat_tracker.best_season("3")
   end
-  
+
   def test_it_can_find_team_with_worst_fans
     # skip
     assert_equal "nil?", @stat_tracker.worst_fans
