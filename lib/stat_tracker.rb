@@ -247,4 +247,17 @@ class StatTracker
       end
     end
   end
+
+  def team_info(team_id)
+    @teams.each do |team|
+      if team.team_id == team_id
+        return { team_id: team.team_id,
+                franchise_id: team.franchise_id,
+                short_name: team.short_name,
+                team_name: team.team_name,
+                abbreviation: team.abbreviation,
+                link: team.link }
+      end
+    end
+  end
 end

@@ -24,7 +24,7 @@ class StatTrackerTest < Minitest::Test
 
   def test_from_csv_stores_array_of_game_objects
 
-    assert_equal Game, StatTracker.from_csv(locations).games[0].class
+    assert_equal Game, StatTracker.from_csv(@locations).games[0].class
   end
 
   def test_from_csv_stores_array_of_team_objects
