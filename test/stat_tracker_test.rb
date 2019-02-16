@@ -166,4 +166,9 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal "Red Wings", @stat_tracker.best_defense
   end
+
+  def test_it_returns_worst_defense
+
+    assert_equal "Bruins", @stat_tracker.worst_defense
+  end
 end
