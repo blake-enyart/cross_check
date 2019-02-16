@@ -217,13 +217,11 @@ class StatTracker
   #   team_object.teamName
   # end
 
-
   def group_game_teams_by_team_id
     @game_teams.group_by do |game_team|
       game_team.team_id
     end
   end
-
 
   def average_goals_per_season
     goals_per_season_hash = {}

@@ -82,6 +82,11 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Bruins", @stat_tracker.best_fans
   end
 
+  def test_it_can_find_team_with_worst_fans
+    # skip
+    assert_equal "nil?", @stat_tracker.worst_fans
+  end
+
   def test_it_can_create_a_hash_of_game_team_objects_by_team_id
 
     assert_equal ["3", "6", "17"], @stat_tracker.group_game_teams_by_team_id.keys
@@ -148,11 +153,6 @@ class StatTrackerTest < Minitest::Test
   def test_best_season_returns_correctly
 
     assert_equal "20122013", @stat_tracker.best_season("3")
-  end
-
-  def test_it_can_find_team_with_worst_fans
-    # skip
-    assert_equal "nil?", @stat_tracker.worst_fans
   end
 
   def test_it_can_create_a_hash_of_game_team_objects_by_team_id
