@@ -152,7 +152,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_find_team_with_worst_fans
-    # skip
+    skip
     assert_equal "nil?", @stat_tracker.worst_fans
   end
 
@@ -160,5 +160,10 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal ["3", "6", "17"], @stat_tracker.group_game_teams_by_team_id.keys
     assert_equal "2012030221", @stat_tracker.group_game_teams_by_team_id["3"][0].game_id
+  end
+
+  def test_it_returns_best_defense
+
+    assert_equal "Red Wings", @stat_tracker.best_defense
   end
 end

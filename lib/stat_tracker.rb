@@ -312,11 +312,24 @@ class StatTracker
           away_team = game_array[0]
         end
       end
-      if away_team.goals < home_team.goals
-        return home_team.team_id
-
-        convert_team_id_and_team_name(home_team)
+      game_array.each do |game|
+        if away_team.goals < home_team.goals
+          return home_team.team_id
+        end
       end
+      team = home_team.team_id
+      convert_team_id_and_team_name(team)
+      #stumped why the team_id will not convert to team name
     end
+  end
+
+  def worst_loss
+    #Biggest difference between team goals and opponent goals for a loss
+    #for the given team.
+  end
+
+  def biggest_team_blowout
+    #Biggest difference between team goals and opponent goals for a win
+    # for the given team.
   end
 end
