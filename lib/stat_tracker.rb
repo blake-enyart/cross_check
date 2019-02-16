@@ -108,11 +108,36 @@ class StatTracker
     hash
   end
 
-  # def best_fans
-  #   @game_teams.each do |key, value|
-  #
-  #   end
-  # end
+  def best_fans
+    home_away_win_difference_hash = {}
+    group_game_teams_by_team_id.each do |team_id, game_teams|
+      total_home_games = game_teams.count do |game_team|
+        game_team.hoa == "home"
+      end
+      count_of_home_wins = game_teams.count do |game_team|
+        game_team.hoa == "home" && game_team.won == "TRUE"
+      end
+      total_away_games = game_teams.count do |game_team|
+        game_team.hoa == "away"
+      end
+      count_of_away_wins = game_teams.count do |game_team|
+        game_team.hoa == "away" && game_team.won == "TRUE"
+      end
+      home_win_percentage_by_team = count_of_home_wins.to_f / total_home_games.to_f
+      away_win_percentage_by_team = count_of_away_wins.to_f / total_away_games.to_f
+      home_away_win_difference = home_win_percentage_by_team - away_win_percentage_by_team
+      home_away_win_difference_hash[team_id] = home_away_win_difference
+    end
+      big_difference = home_away_win_difference_hash.select do |team_id, value|
+        value == home_away_win_difference_hash.values.max
+      end
+    team_id = big_difference.keys.first
+    team_object = @teams.find do |team|
+      team.team_id == team_id
+      # binding.pry
+    end
+    team_object.teamName
+  end
 
   def group_game_teams_by_team_id
     @game_teams.group_by do |game_team|
