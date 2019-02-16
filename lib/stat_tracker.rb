@@ -312,9 +312,9 @@ class StatTracker
           away_team = game_array[0]
         end
       end
-      game_array.each do |home_team|
       if away_team.goals < home_team.goals
         return home_team.team_id
+
         convert_team_id_and_team_name(home_team)
       end
     end
