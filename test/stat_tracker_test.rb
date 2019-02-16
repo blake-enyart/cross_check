@@ -24,7 +24,7 @@ class StatTrackerTest < Minitest::Test
 
   def test_from_csv_stores_array_of_game_objects
 
-    assert_equal Game, StatTracker.from_csv(locations).games[0].class
+    assert_equal Game, StatTracker.from_csv(@locations).games[0].class
   end
 
   def test_from_csv_stores_array_of_team_objects
@@ -78,6 +78,17 @@ class StatTrackerTest < Minitest::Test
     assert_equal expected, @stat_tracker.count_of_games_by_season
   end
 
+  def test_it_can_find_team_with_best_fans
+    # skip
+    assert_equal "Bruins", @stat_tracker.best_fans
+  end
+
+  def test_it_can_create_a_hash_of_game_team_objects_by_team_id
+
+    assert_equal ["3", "6", "17"], @stat_tracker.group_game_teams_by_team_id.keys
+    assert_equal "2012030221", @stat_tracker.group_game_teams_by_team_id["3"][0].game_id
+  end
+
   def test_it_can_calculate_average_goals_by_season
     assert_equal ({"20122013"=>5.5, "20132014"=>4.92}), @stat_tracker.average_goals_per_season
   end
@@ -124,5 +135,30 @@ class StatTrackerTest < Minitest::Test
   def test_winningest_team_returns_correct_team
 
     assert_equal "Bruins", @stat_tracker.winningest_team
+  end
+
+  #Iteration 4 test
+  def test_team_info_returns_attributes_in_hash
+    expected = { abbreviation: "BOS", franchise_id: "6",
+                link: "/api/v1/teams/6", short_name: "Boston",
+                 team_id: "6", team_name: "Bruins" }
+
+    assert_equal expected, @stat_tracker.team_info("6")
+  end
+
+  def test_best_season_returns_correctly
+
+    assert_equal "20122013", @stat_tracker.best_season("3")
+  end
+  
+  def test_it_can_find_team_with_worst_fans
+    # skip
+    assert_equal "nil?", @stat_tracker.worst_fans
+  end
+
+  def test_it_can_create_a_hash_of_game_team_objects_by_team_id
+
+    assert_equal ["3", "6", "17"], @stat_tracker.group_game_teams_by_team_id.keys
+    assert_equal "2012030221", @stat_tracker.group_game_teams_by_team_id["3"][0].game_id
   end
 end

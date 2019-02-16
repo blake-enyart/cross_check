@@ -1,3 +1,5 @@
+require_relative './class_helper'
+
 class StatTracker
 
   attr_reader :games,
@@ -47,7 +49,7 @@ class StatTracker
   def self.from_csv(locations)
     games_data = read_game_file(locations[:games])
     teams_data = read_team_file(locations[:teams])
-    game_teams_data = read_game_teams_file(locations[:game_teams])
+    game_teams_data = read_game_teams_file(locations[:game_teams], games_data)
     StatTracker.new(games_data, teams_data, game_teams_data)
   end
 
@@ -65,9 +67,14 @@ class StatTracker
     teams.map { |row| Team.new(row) }
   end
 
-  def self.read_game_teams_file(game_teams_file)
+  def self.read_game_teams_file(game_teams_file, games_data)
     game_teams = read_in_csv(game_teams_file)
-    game_teams.map { |row| GameTeam.new(row) }
+
+    game_id_season_link = games_data.map do |game|
+      [game.game_id, game.season]
+    end.sort_by { |pair| pair[0].to_i }
+
+    game_teams.map { |row| GameTeam.new(row, game_id_season_link) }
   end
 
   def total_goals(games_array)
@@ -140,6 +147,48 @@ class StatTracker
     end
     hash
   end
+
+
+  def best_fans
+    home_away_win_difference_hash = {}
+    group_game_teams_by_team_id.each do |team_id, game_teams|
+      total_home_games = game_teams.count do |game_team|
+        game_team.hoa == "home"
+      end
+      count_of_home_wins = game_teams.count do |game_team|
+        game_team.hoa == "home" && game_team.won == "TRUE"
+      end
+      total_away_games = game_teams.count do |game_team|
+        game_team.hoa == "away"
+      end
+      count_of_away_wins = game_teams.count do |game_team|
+        game_team.hoa == "away" && game_team.won == "TRUE"
+      end
+      home_win_percentage_by_team = count_of_home_wins.to_f / total_home_games.to_f
+      away_win_percentage_by_team = count_of_away_wins.to_f / total_away_games.to_f
+      home_away_win_difference = home_win_percentage_by_team - away_win_percentage_by_team
+      home_away_win_difference_hash[team_id] = home_away_win_difference
+    end
+      big_difference = home_away_win_difference_hash.select do |team_id, value|
+        value == home_away_win_difference_hash.values.max
+      end
+    team_id = big_difference.keys.first
+    team_object = @teams.find do |team|
+      team.team_id == team_id
+      # binding.pry
+    end
+    team_object.teamName
+  end
+
+  def group_game_teams_by_team_id
+    @game_teams.group_by do |game_team|
+      game_team.team_id
+    end
+  end
+  # Name of the team with biggest difference between
+  # home and away win percentages.
+  # Return String of team
+
 
   def average_goals_per_season
     goals_per_season_hash = {}

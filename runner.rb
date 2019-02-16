@@ -1,5 +1,3 @@
-require './lib/class_helper'
-
 game_path = './data/samples/game.csv'
 team_path = './data/samples/team_info.csv'
 game_teams_path = './data/samples/game_teams_stats.csv'
