@@ -84,7 +84,7 @@ class StatTrackerTest < Minitest::Test
 
   def test_it_can_find_team_with_worst_fans
     # skip
-    #sample data has no worst_fans team, created worst_fans.csv for testing
+    #sample data has no worst_fans team, created game_teams_worst_fans.csv for testing
     assert_equal ["Bruins", "Rangers", "Red Wings"], @stat_tracker.worst_fans
   end
 
