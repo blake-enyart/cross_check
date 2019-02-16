@@ -136,4 +136,15 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal "Bruins", @stat_tracker.winningest_team
   end
+
+  def test_it_can_find_team_with_worst_fans
+    # skip
+    assert_equal "nil?", @stat_tracker.worst_fans
+  end
+
+  def test_it_can_create_a_hash_of_game_team_objects_by_team_id
+
+    assert_equal ["3", "6", "17"], @stat_tracker.group_game_teams_by_team_id.keys
+    assert_equal "2012030221", @stat_tracker.group_game_teams_by_team_id["3"][0].game_id
+  end
 end
