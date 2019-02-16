@@ -1,3 +1,5 @@
+require_relative './class_helper'
+
 class StatTracker
 
   attr_reader :games,
