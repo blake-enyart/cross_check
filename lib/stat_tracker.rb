@@ -200,7 +200,7 @@ class StatTracker
     end
     worst_fans_array = []
     away_home_win_difference_hash.each do |team_id, away_record_value|
-      if away_record_value < 0 #should be > for atucal method
+      if away_record_value > 0 #should be > for atucal method
         worst_fans_array << team_id
       end
     end
