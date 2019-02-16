@@ -49,7 +49,7 @@ class StatTracker
   def self.from_csv(locations)
     games_data = read_game_file(locations[:games])
     teams_data = read_team_file(locations[:teams])
-    game_teams_data = read_game_teams_file(locations[:game_teams])
+    game_teams_data = read_game_teams_file(locations[:game_teams], games_data)
     StatTracker.new(games_data, teams_data, game_teams_data)
   end
 
@@ -67,9 +67,14 @@ class StatTracker
     teams.map { |row| Team.new(row) }
   end
 
-  def self.read_game_teams_file(game_teams_file)
+  def self.read_game_teams_file(game_teams_file, games_data)
     game_teams = read_in_csv(game_teams_file)
-    game_teams.map { |row| GameTeam.new(row) }
+
+    game_id_season_link = games_data.map do |game|
+      [game.game_id, game.season]
+    end.sort_by { |pair| pair[0].to_i }
+    
+    game_teams.map { |row| GameTeam.new(row, game_id_season_link) }
   end
 
   def total_goals(games_array)
@@ -292,6 +297,22 @@ class StatTracker
     end
   end
 
+  def team_info(team_id)
+    @teams.each do |team|
+      if team.team_id == team_id
+        return { team_id: team.team_id,
+                franchise_id: team.franchise_id,
+                short_name: team.short_name,
+                team_name: team.team_name,
+                abbreviation: team.abbreviation,
+                link: team.link }
+      end
+    end
+  end
+
+  def best_season(team_id)
+  end
+  
   def worst_fans
     away_home_win_difference_hash = {}
     group_game_teams_by_team_id.each do |team_id, game_teams|
@@ -311,10 +332,8 @@ class StatTracker
       away_win_percentage_by_team = count_of_away_wins.to_f / total_away_games.to_f
       away_home_win_difference = away_win_percentage_by_team - home_win_percentage_by_team
       away_home_win_difference_hash[team_id] = away_home_win_difference
-      # binding.pry
     end
-    away_home_win_difference_hash
-    # binding.pry
+    away_home_win_difference_hash 
   end
   # List of names of all teams with better away records
   # than home records.
@@ -338,5 +357,4 @@ class StatTracker
       game_team.team_id
     end
   end
-
 end
