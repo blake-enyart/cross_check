@@ -125,4 +125,13 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal "Bruins", @stat_tracker.winningest_team
   end
+
+  #Iteration 4 test
+  def test_team_info_returns_attributes_in_hash
+    expected = { abbreviation: "BOS", franchise_id: "6",
+                link: "/api/v1/teams/6", short_name: "Boston",
+                 team_id: "6", team_name: "Bruins" }
+
+    assert_equal expected, @stat_tracker.team_info("6")
+  end
 end
