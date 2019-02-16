@@ -73,7 +73,7 @@ class StatTracker
     game_id_season_link = games_data.map do |game|
       [game.game_id, game.season]
     end.sort_by { |pair| pair[0].to_i }
-    
+
     game_teams.map { |row| GameTeam.new(row, game_id_season_link) }
   end
 
@@ -311,8 +311,89 @@ class StatTracker
   end
 
   def best_season(team_id)
+    game_teams_by_season = @game_teams.group_by(&:season)
+    game_teams_by_season.each do |season, game_team_array|
+      game_team_array.sort_by(&:game_id)
+
+      game_grouping = []
+      game_team_array.each_with_index do |game_team, index|
+        if game_team_array[index+1] != nil
+          if game_team.game_id == game_team_array[index+1].game_id
+            game_grouping << [game_team, game_team_array[index+1]]
+          end
+        end
+      end
+
+      game_teams_by_season[season] = game_grouping
+    end
+
+    game_teams_by_season.each do |season, game_pair_array|
+      game_pair_array.select! do |game_pair|
+        game_pair[0].team_id == team_id ||
+        game_pair[1].team_id == team_id
+      end
+    end
+
+    wins_per_season = Hash.new { |hash, key| hash[key] = 0 }
+    game_teams_by_season.keys.each do |season|
+      wins_per_season[season]
+    end
+
+    game_teams_by_season.each do |season, game_pair_array|
+      wins_per_season[season] = wins_per_season(game_pair_array, team_id)
+    end
+
+    wins_per_season.max_by { |season, wins| wins }[0]
   end
-  
+
+  def worst_season(team_id)
+    game_teams_by_season = @game_teams.group_by(&:season)
+    game_teams_by_season.each do |season, game_team_array|
+      game_team_array.sort_by(&:game_id)
+
+      game_grouping = []
+      game_team_array.each_with_index do |game_team, index|
+        if game_team_array[index+1] != nil
+          if game_team.game_id == game_team_array[index+1].game_id
+            game_grouping << [game_team, game_team_array[index+1]]
+          end
+        end
+      end
+
+      game_teams_by_season[season] = game_grouping
+    end
+
+    game_teams_by_season.each do |season, game_pair_array|
+      game_pair_array.select! do |game_pair|
+        game_pair[0].team_id == team_id ||
+        game_pair[1].team_id == team_id
+      end
+    end
+
+    wins_per_season = Hash.new { |hash, key| hash[key] = 0 }
+    game_teams_by_season.keys.each do |season|
+      wins_per_season[season]
+    end
+
+    game_teams_by_season.each do |season, game_pair_array|
+      wins_per_season[season] = wins_per_season(game_pair_array, team_id)
+    end
+
+    wins_per_season.min_by { |season, wins| wins }[0]
+  end
+
+  def wins_per_season(game_pair_array, team_id)
+    wins_per_season = 0
+
+    game_pair_array.each do |game_pair|
+      outcome = win_determination(game_pair)
+      if outcome[0] == team_id
+        wins_per_season += 1
+      end
+    end
+    wins_per_season
+  end
+
   def worst_fans
     away_home_win_difference_hash = {}
     group_game_teams_by_team_id.each do |team_id, game_teams|
@@ -333,7 +414,7 @@ class StatTracker
       away_home_win_difference = away_win_percentage_by_team - home_win_percentage_by_team
       away_home_win_difference_hash[team_id] = away_home_win_difference
     end
-    away_home_win_difference_hash 
+    away_home_win_difference_hash
   end
   # List of names of all teams with better away records
   # than home records.
