@@ -151,16 +151,16 @@ class StatTracker
   def best_fans
     home_away_win_difference_hash = {}
     group_game_teams_by_team_id.each do |team_id, game_teams|
-      total_home_games = @game_teams.count do |game_team|
+      total_home_games = game_teams.count do |game_team|
         game_team.hoa == "home"
       end
-      count_of_home_wins = @game_teams.count do |game_team|
+      count_of_home_wins = game_teams.count do |game_team|
         game_team.hoa == "home" && game_team.won == "TRUE"
       end
-      total_away_games = @game_teams.count do |game_team|
+      total_away_games = game_teams.count do |game_team|
         game_team.hoa == "away"
       end
-      count_of_away_wins = @game_teams.count do |game_team|
+      count_of_away_wins = game_teams.count do |game_team|
         game_team.hoa == "away" && game_team.won == "TRUE"
       end
       home_win_percentage_by_team = count_of_home_wins.to_f / total_home_games.to_f
@@ -181,16 +181,16 @@ class StatTracker
   def worst_fans
     away_home_win_difference_hash = {}
     group_game_teams_by_team_id.each do |team_id, game_teams|
-      total_home_games = @game_teams.count do |game_team|
+      total_home_games = game_teams.count do |game_team|
         game_team.hoa == "home"
       end
-      count_of_home_wins = @game_teams.count do |game_team|
+      count_of_home_wins = game_teams.count do |game_team|
         game_team.hoa == "home" && game_team.won == "TRUE"
       end
-      total_away_games = @game_teams.count do |game_team|
+      total_away_games = game_teams.count do |game_team|
         game_team.hoa == "away"
       end
-      count_of_away_wins = @game_teams.count do |game_team|
+      count_of_away_wins = game_teams.count do |game_team|
         game_team.hoa == "away" && game_team.won == "TRUE"
       end
       home_win_percentage_by_team = count_of_home_wins.to_f / total_home_games.to_f
@@ -200,7 +200,7 @@ class StatTracker
     end
     worst_fans_array = []
     away_home_win_difference_hash.each do |team_id, away_record_value|
-      if away_record_value > 0 #should be > for atucal method
+      if away_record_value > 0
         worst_fans_array << team_id
       end
     end
