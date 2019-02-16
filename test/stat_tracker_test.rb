@@ -24,7 +24,7 @@ class StatTrackerTest < Minitest::Test
 
   def test_from_csv_stores_array_of_game_objects
 
-    assert_equal Game, StatTracker.from_csv(locations).games[0].class
+    assert_equal Game, StatTracker.from_csv(@locations).games[0].class
   end
 
   def test_from_csv_stores_array_of_team_objects
@@ -124,5 +124,10 @@ class StatTrackerTest < Minitest::Test
   def test_winningest_team_returns_correct_team
 
     assert_equal "Bruins", @stat_tracker.winningest_team
+  end
+
+  def test_it_returns_best_defense_by_team_name
+
+    assert_equal "Red Wings", @stat_tracker.best_defense
   end
 end
