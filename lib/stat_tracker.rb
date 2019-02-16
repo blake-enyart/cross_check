@@ -108,24 +108,15 @@ class StatTracker
     hash
   end
 
-  def best_fans
-    # returns total home games for all teams
-    # total_games = 0
-    # @game_teams.each do |game_team|
-    #   if game_team.hoa == "home"
-    #     total_games += 1
-    #   end
-    # end
-    # total_games
-    game_teams_by_team_id = game_teams.group_by do |game_team|
+  # def best_fans
+  #   @game_teams.each do |key, value|
+  #
+  #   end
+  # end
+
+  def group_game_teams_by_team_id
+    @game_teams.group_by do |game_team|
       game_team.team_id
-    end
-    # home_games = game_teams_by_team_id.keep_if do |team_id, game_teams|
-    #   game_teams.find_all do |game_team|
-    home_games = game_teams_by_team_id.keep_if do |team_id, game_teams|
-      game_teams.include?()
-        game_team.hoa == "true"
-      end
     end
   end
   # Name of the team with biggest difference between
