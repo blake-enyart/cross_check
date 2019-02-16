@@ -247,4 +247,27 @@ class StatTracker
       end
     end
   end
+
+  def best_defense
+    win_tracker = @teams_hash
+    win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
+
+    game_grouping = @game_teams.group_by { |row| row.game_id }
+    game_grouping.each do |game_id, game_array|
+      if game_array.length == 2
+        if game_array[0].hoa == 'home'
+          home_team = game_array[0]
+          away_team = game_array[1]
+        else
+          home_team = game_array[1]
+          away_team = game_array[0]
+        end
+      end
+      game_array.each do |home_team|
+      if away_team.goals < home_team.goals
+        return home_team.team_id
+        convert_team_id_and_team_name(home_team)
+      end
+    end
+  end
 end
