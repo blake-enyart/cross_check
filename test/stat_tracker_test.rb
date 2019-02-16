@@ -137,11 +137,6 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Bruins", @stat_tracker.winningest_team
   end
 
-<<<<<<< HEAD
-  def test_it_returns_best_defense_by_team_name
-
-    assert_equal "Red Wings", @stat_tracker.best_defense
-=======
   #Iteration 4 test
   def test_team_info_returns_attributes_in_hash
     expected = { abbreviation: "BOS", franchise_id: "6",
@@ -155,7 +150,7 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal "20122013", @stat_tracker.best_season("3")
   end
-  
+
   def test_it_can_find_team_with_worst_fans
     # skip
     assert_equal "nil?", @stat_tracker.worst_fans
@@ -165,6 +160,5 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal ["3", "6", "17"], @stat_tracker.group_game_teams_by_team_id.keys
     assert_equal "2012030221", @stat_tracker.group_game_teams_by_team_id["3"][0].game_id
->>>>>>> master
   end
 end
