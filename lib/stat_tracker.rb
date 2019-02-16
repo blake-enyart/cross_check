@@ -47,7 +47,7 @@ class StatTracker
   def self.from_csv(locations)
     games_data = read_game_file(locations[:games])
     teams_data = read_team_file(locations[:teams])
-    game_teams_data = read_game_teams_file(locations[:game_teams])
+    game_teams_data = read_game_teams_file(locations[:game_teams], games_data)
     StatTracker.new(games_data, teams_data, game_teams_data)
   end
 
@@ -65,9 +65,14 @@ class StatTracker
     teams.map { |row| Team.new(row) }
   end
 
-  def self.read_game_teams_file(game_teams_file)
+  def self.read_game_teams_file(game_teams_file, games_data)
     game_teams = read_in_csv(game_teams_file)
-    game_teams.map { |row| GameTeam.new(row) }
+
+    game_id_season_link = games_data.map do |game|
+      [game.game_id, game.season]
+    end.sort_by { |pair| pair[0].to_i }
+    
+    game_teams.map { |row| GameTeam.new(row, game_id_season_link) }
   end
 
   def total_goals(games_array)
@@ -259,5 +264,37 @@ class StatTracker
                 link: team.link }
       end
     end
+  end
+
+  def best_season(team_id)
+  #   games_by_season = @games.group_by(&:season)
+  #   selected_games = {}
+  #
+  #   games_by_season.each do |season, games_array|
+  #     games_array.select! do |game|
+  #       game.away_team_id == team_id || game.home_team_id == team_id
+  #     end
+  #
+  #     game_id_array = []
+  #
+  #     games_array.each do |game|
+  #       if games_array.include?(game) == true
+  #         game_id_array << game.game_id
+  #       end
+  #     end
+  #
+  #     selected_games[season] = game_id_array
+  #   end
+  #
+  #   game_grouping = @game_teams.group_by { |row| row.game_id }
+  #
+  #   selected_games.each do |season, game_id_array|
+  #     game_id_array.each do |game_id|
+  #       if
+  #       game_id = #game_team_pairs
+  #
+  #     selected_games[season] = game_team_pairs
+  #   game_grouping.select! { |game_id, games_pair| selected_games.include?(game_id) }
+  #   binding.pry
   end
 end

@@ -14,7 +14,14 @@ class GameTeamTest < Minitest::Test
     }
 
     row = StatTracker.read_in_csv(locations[:game_teams]).readline
-    @game_team = GameTeam.new(row)
+
+    games_data = StatTracker.from_csv(locations).games
+
+    game_id_season_link = games_data.map do |game|
+      [game.game_id, game.season]
+    end.sort_by { |pair| pair[0].to_i }
+
+    @game_team = GameTeam.new(row, game_id_season_link)
   end
 
   def test_it_exist
@@ -39,5 +46,6 @@ class GameTeamTest < Minitest::Test
     assert_equal 44.8, @game_team.faceoffwinpercentage
     assert_equal 17, @game_team.giveaways
     assert_equal 7, @game_team.takeaways
+    assert_equal "20122013", @game_team.season
   end
 end
