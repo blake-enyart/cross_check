@@ -360,6 +360,105 @@ class StatTracker
     convert_team_id_and_team_name(team)
   end
 
+  def best_season(team_id)
+    game_teams_by_season = @game_teams.group_by(&:season)
+    game_teams_by_season.each do |season, game_team_array|
+      game_team_array.sort_by(&:game_id)
+
+      game_grouping = []
+      game_team_array.each_with_index do |game_team, index|
+        if game_team_array[index+1] != nil
+          if game_team.game_id == game_team_array[index+1].game_id
+            game_grouping << [game_team, game_team_array[index+1]]
+          end
+        end
+      end
+
+      game_teams_by_season[season] = game_grouping
+    end
+
+    game_teams_by_season.each do |season, game_pair_array|
+      game_pair_array.select! do |game_pair|
+        game_pair[0].team_id == team_id ||
+        game_pair[1].team_id == team_id
+      end
+    end
+
+    wins_per_season = Hash.new { |hash, key| hash[key] = 0 }
+    game_teams_by_season.keys.each do |season|
+      wins_per_season[season]
+    end
+
+    game_teams_by_season.each do |season, game_pair_array|
+      wins_per_season[season] = wins_per_season(game_pair_array, team_id)
+    end
+
+    wins_per_season.max_by { |season, wins| wins }[0]
+  end
+
+  def worst_season(team_id)
+    game_teams_by_season = @game_teams.group_by(&:season)
+    game_teams_by_season.each do |season, game_team_array|
+      game_team_array.sort_by(&:game_id)
+
+      game_grouping = []
+      game_team_array.each_with_index do |game_team, index|
+        if game_team_array[index+1] != nil
+          if game_team.game_id == game_team_array[index+1].game_id
+            game_grouping << [game_team, game_team_array[index+1]]
+          end
+        end
+      end
+
+      game_teams_by_season[season] = game_grouping
+    end
+
+    game_teams_by_season.each do |season, game_pair_array|
+      game_pair_array.select! do |game_pair|
+        game_pair[0].team_id == team_id ||
+        game_pair[1].team_id == team_id
+      end
+    end
+
+    wins_per_season = Hash.new { |hash, key| hash[key] = 0 }
+    game_teams_by_season.keys.each do |season|
+      wins_per_season[season]
+    end
+
+    game_teams_by_season.each do |season, game_pair_array|
+      wins_per_season[season] = wins_per_season(game_pair_array, team_id)
+    end
+
+    wins_per_season.min_by { |season, wins| wins }[0]
+  end
+
+  def wins_per_season(game_pair_array, team_id)
+    wins_per_season = 0
+
+    game_pair_array.each do |game_pair|
+      outcome = win_determination(game_pair)
+      if outcome[0] == team_id
+        wins_per_season += 1
+      end
+    end
+    wins_per_season
+  end
+
+  def worst_fans
+    away_home_win_difference_hash = {}
+    group_game_teams_by_team_id.each do |team_id, game_teams|
+      total_home_games = game_teams.count do |game_team|
+        game_team.hoa == "home"
+      end
+      count_of_home_wins = game_teams.count do |game_team|
+        game_team.hoa == "home" && game_team.won == "TRUE"
+      end
+      total_away_games = game_teams.count do |game_team|
+        game_team.hoa == "away"
+      end
+      count_of_away_wins = game_teams.count do |game_team|
+        game_team.hoa == "away" && game_team.won == "TRUE"
+
   def worst_defense
     win_tracker = @teams_hash
     win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
@@ -381,6 +480,25 @@ class StatTracker
         defense_tracker << away_array
       end
     end
+    away_home_win_difference_hash
+  end
+        
+  # List of names of all teams with better away records
+  # than home records.
+  # Array
+  #     home_away_win_difference_hash[team_id] = home_away_win_difference
+  #   end
+  #     big_difference = home_away_win_difference_hash.select do |team_id, value|
+  #       value == home_away_win_difference_hash.values.max
+  #     end
+  #   team_id = big_difference.keys.first
+  #   team_object = @teams.find do |team|
+  #     team.team_id == team_id
+  #     # binding.pry
+  #   end
+  #   team_object.teamName
+  # end
+
     defense_tracker.each do |score_outcome|
       win_tracker[score_outcome [0]] += score_outcome[1]
     end
