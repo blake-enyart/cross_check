@@ -200,4 +200,9 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal "Rangers", @stat_tracker.favorite_opponent("6")
   end
+
+  def test_rival_returns_correctly
+
+    assert_equal "Bruins", @stat_tracker.rival("6")
+  end
 end
