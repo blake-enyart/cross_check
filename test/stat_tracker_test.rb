@@ -189,4 +189,10 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal "Bruins", @stat_tracker.worst_defense
   end
+
+  def test_average_win_percentage_returns_correctly
+
+    assert_equal 68.42, @stat_tracker.average_win_percentage("6")
+    assert_equal 27.27, @stat_tracker.average_win_percentage("3")
+  end
 end
