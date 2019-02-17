@@ -1,4 +1,4 @@
-# require_relative './class_helper'
+require_relative './class_helper'
 
 class StatTracker
 
