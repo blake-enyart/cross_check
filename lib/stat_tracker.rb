@@ -346,10 +346,7 @@ class StatTracker
   end
 
   def most_goals_scored(team_id)
-    games_by_team = @game_teams.find_all do |game_team|
-      game_team.team_id == team_id
-    end
-    most_goals = games_by_team.max_by do |game_team|
+    most_goals = @teams_hash[team_id].max_by do |game_team|
       game_team.goals
     end
     most_goals.goals
