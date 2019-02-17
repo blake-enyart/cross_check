@@ -16,7 +16,6 @@ class StatTrackerTest < Minitest::Test
     @stat_tracker = StatTracker.from_csv(@locations)
   end
 
-
   def test_it_exists
 
     assert_instance_of StatTracker, @stat_tracker
@@ -83,6 +82,23 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Bruins", @stat_tracker.best_fans
   end
 
+  def test_it_can_find_team_with_worst_fans
+    # skip
+    #sample data has no worst_fans team, created game_teams_worst_fans.csv for testing
+    game_path = './data/samples/game.csv'
+    team_path = './data/samples/team_info.csv'
+    game_teams_path = './data/samples/game_teams_worst_fans.csv'
+  
+    locations = {
+      games: game_path,
+      teams: team_path,
+      game_teams: game_teams_path
+    }
+    stat_tracker = StatTracker.from_csv(locations)
+
+    assert_equal ["Rangers","Red Wings"], stat_tracker.worst_fans
+  end
+
   def test_it_can_create_a_hash_of_game_team_objects_by_team_id
 
     assert_equal ["3", "6", "17"], @stat_tracker.group_game_teams_by_team_id.keys
@@ -147,7 +163,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_best_season_returns_correctly
-
+    skip
     assert_equal "20122013", @stat_tracker.best_season("3")
   end
 
@@ -157,7 +173,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_find_team_with_worst_fans
-    # skip
+    skip
     assert_equal "nil?", @stat_tracker.worst_fans
   end
 
@@ -165,5 +181,15 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal ["3", "6", "17"], @stat_tracker.group_game_teams_by_team_id.keys
     assert_equal "2012030221", @stat_tracker.group_game_teams_by_team_id["3"][0].game_id
+  end
+
+  def test_it_returns_best_defense
+
+    assert_equal "Red Wings", @stat_tracker.best_defense
+  end
+
+  def test_it_returns_worst_defense
+
+    assert_equal "Bruins", @stat_tracker.worst_defense
   end
 end
