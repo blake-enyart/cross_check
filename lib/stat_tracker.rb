@@ -545,17 +545,17 @@ class StatTracker
 
       preseason_season_holder_hash = {}
       preseason_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(preseason_game_teams)
-      preseason_season_holder_hash[:total_goals_scored] = total_goals_scored(preseason_game_teams)
+      preseason_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(preseason_game_teams)
       preseason_season_holder_hash[:total_goals_against] = 0
-      preseason_season_holder_hash[:average_goals_scored] = 0.0
+      preseason_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(preseason_game_teams)
       preseason_season_holder_hash[:average_goals_against] = 0.0
       game_team_season_type_hash[season][:preseason] = preseason_season_holder_hash
 
       regular_season_holder_hash = {}
       regular_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(regular_season_game_teams)
-      regular_season_holder_hash[:total_goals_scored] = total_goals_scored(regular_season_game_teams)
+      regular_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(regular_season_game_teams)
       regular_season_holder_hash[:total_goals_against] = 0
-      regular_season_holder_hash[:average_goals_scored] = 0.0
+      regular_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(regular_season_game_teams)
       regular_season_holder_hash[:average_goals_against] = 0.0
       game_team_season_type_hash[season][:regular_season] = regular_season_holder_hash
     end
@@ -570,13 +570,16 @@ class StatTracker
       game_team.won == "TRUE"
     end
     (total_wins.to_f / total_games.to_f).round(2)
-    # return 0.00 total wins/total games
   end
 
-  def total_goals_scored(game_team_array)
+  def total_goals_scored_ss(game_team_array)
     game_team_array.sum do |game_team|
       game_team.goals
     end
+  end
+
+  def average_goals_scored_ss(game_team_array)
+    (total_goals_scored_ss(game_team_array).to_f / game_team_array.length.to_f).round(2)
   end
 
 

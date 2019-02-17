@@ -236,7 +236,12 @@ end
 
 def test_total_goals_scored
 
-  assert_equal 100, @stat_tracker.total_goals_scored(@stat_tracker.game_teams)
+  assert_equal 100, @stat_tracker.total_goals_scored_ss(@stat_tracker.game_teams)
+end
+
+def test_average_goals_scored_ss
+
+  assert_equal 2.56, @stat_tracker.average_goals_scored_ss(@stat_tracker.game_teams)
 end
 
 
