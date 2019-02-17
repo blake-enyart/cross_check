@@ -88,7 +88,7 @@ class StatTrackerTest < Minitest::Test
     game_path = './data/samples/game.csv'
     team_path = './data/samples/team_info.csv'
     game_teams_path = './data/samples/game_teams_worst_fans.csv'
-  
+
     locations = {
       games: game_path,
       teams: team_path,
@@ -171,5 +171,10 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal ["3", "6", "17"], @stat_tracker.group_game_teams_by_team_id.keys
     assert_equal "2012030221", @stat_tracker.group_game_teams_by_team_id["3"][0].game_id
+  end
+
+  def test_it_can_find_most_goals_scored_for_a_particular_team
+
+    assert_equal 6, @stat_tracker.most_goals_scored("17")
   end
 end

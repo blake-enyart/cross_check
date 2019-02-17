@@ -345,5 +345,29 @@ class StatTracker
   def best_season(team_id)
   end
 
+  # def most_goals_scored(team_id)
+  #   game_teams_by_team_id = []
+  #   @game_teams.each do |game_team|
+  #     if game_team.team_id == team_id
+  #       game_teams_by_team_id << game_team
+  #     end
+  #   end
+  #   most_goals = game_teams_by_team_id.max_by do |game_team|
+  #     game_team.goals
+  #   end
+  #   most_goals.goals
+  # end
+
+  def most_goals_scored(team_id)
+    games_by_team = @game_teams.find_all do |game_team|
+      game_team.team_id == team_id
+    end
+    most_goals = games_by_team.max_by do |game_team|
+      game_team.goals
+    end
+    most_goals.goals
+  end
+
+
 
 end
