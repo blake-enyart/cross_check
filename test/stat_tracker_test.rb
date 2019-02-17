@@ -193,30 +193,31 @@ class StatTrackerTest < Minitest::Test
   def test_it_can_compile_seasonal_summary
   expected = {
     "20122013" => {
-      preseason: {
+      :preseason => {
         :win_percentage=>0.80,
         :total_goals_scored=>16,
         :total_goals_against=>10,
         :average_goals_scored=>3.2,
-        :average_goals_against=>2.0},
-        :regular_season => {
-          :win_percentage=>0.33,
-          :total_goals_scored=>9,
-          :total_goals_against=>9,
-          :average_goals_scored=>3.0,
-          :average_goals_against=>3.0
+        :average_goals_against=>2.0
+      },
+      :regular_season => {
+        :win_percentage=>0.33,
+        :total_goals_scored=>9,
+        :total_goals_against=>9,
+        :average_goals_scored=>3.0,
+        :average_goals_against=>3.0
         }
       },
       "20132014" => {
-        preseason: {
+        :preseason => {
           :win_percentage=>0.80,
           :total_goals_scored=>14,
           :total_goals_against=>6,
           :average_goals_scored=>2.8,
           :average_goals_against=>1.2
         },
-        :regular_season=>
-        {:win_percentage=>0.67,
+        :regular_season => {
+          :win_percentage=>0.67,
           :total_goals_scored=>18,
           :total_goals_against=>16,
           :average_goals_scored=>3.0,
@@ -224,6 +225,7 @@ class StatTrackerTest < Minitest::Test
         }
       }
     }
+    
   assert_equal expected, @stat_tracker.seasonal_summary("6")
 end
 

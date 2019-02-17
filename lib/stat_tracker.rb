@@ -513,8 +513,72 @@ class StatTracker
   end
 
   def seasonal_summary(team_id)
+    seasonal_summary_hash = {}
 
-    # return monster_hash
+    game_teams_by_team_id = @game_teams.find_all do |game_team|
+      game_team.team_id == team_id
+    end
+    # game_teams_by_team_id.each do |game_team|
+    #   seasonal_summary_hash[game_team.season] = {}
+    # end
+    # seasonal_summary_hash
+
+    game_teams_by_season_hash = game_teams_by_team_id.group_by do |game_team|
+      game_team.season
+    end
+
+    pre_reg_season_hash = {}
+    game_team_season_type_hash = {}
+    game_teams_by_season_hash.each do |season, game_teams|
+      preseason_game_teams = game_teams.find_all do |game_team|
+        #example: game_id "2012030223" "2012" = season; "03" = preseason/playoff id, "0223" = game identifier(not important)
+        #of "03" preseason id, "3" is [5] index; "02" = regular season id
+        game_team.game_id[5] == "3"
+      end
+      regular_season_game_teams = game_teams.find_all do |game_team|
+        game_team.game_id[5] == "2"
+      end
+      pre_reg_season_hash[:preseason] = preseason_game_teams
+      pre_reg_season_hash[:regular_season] = regular_season_game_teams
+      game_team_season_type_hash[season] = pre_reg_season_hash
+    end
+    game_team_season_type_hash
+    # seasonal_summary_hash = {
+    #   "20122013" => {
+    #     :preseason => {
+    #       :win_percentage=>0.80,
+    #       :total_goals_scored=>16,
+    #       :total_goals_against=>10,
+    #       :average_goals_scored=>3.2,
+    #       :average_goals_against=>2.0
+    #     },
+    #     :regular_season => {
+    #       :win_percentage=>0.33,
+    #       :total_goals_scored=>9,
+    #       :total_goals_against=>9,
+    #       :average_goals_scored=>3.0,
+    #       :average_goals_against=>3.0
+    #       }
+    #     },
+    #     "20132014" => {
+    #       :preseason => {
+    #         :win_percentage=>0.80,
+    #         :total_goals_scored=>14,
+    #         :total_goals_against=>6,
+    #         :average_goals_scored=>2.8,
+    #         :average_goals_against=>1.2
+    #       },
+    #       :regular_season => {
+    #         :win_percentage=>0.67,
+    #         :total_goals_scored=>18,
+    #         :total_goals_against=>16,
+    #         :average_goals_scored=>3.0,
+    #         :average_goals_against=>2.67
+    #       }
+    #     }
+    #   }
+
+    seasonal_summary_hash
   end
   # For each season that the team has played,
   # a hash that has two keys (:preseason, and :regular_season),
