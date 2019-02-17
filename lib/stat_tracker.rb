@@ -512,6 +512,20 @@ class StatTracker
 
   end
 
+  def most_goals_scored(team_id)
+    most_goals = @teams_hash[team_id].max_by do |game_team|
+      game_team.goals
+    end
+    most_goals.goals
+  end
+
+  def fewest_goals_scored(team_id)
+    fewest_goals = @teams_hash[team_id].min_by do |game_team|
+      game_team.goals
+    end
+    fewest_goals.goals
+  end
+
   def worst_loss
     #Biggest difference between team goals and opponent goals for a loss
     #for the given team.

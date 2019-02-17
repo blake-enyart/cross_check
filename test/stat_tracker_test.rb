@@ -78,17 +78,17 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_find_team_with_best_fans
-    # skip
+    
     assert_equal "Bruins", @stat_tracker.best_fans
   end
 
   def test_it_can_find_team_with_worst_fans
-    # skip
+
     #sample data has no worst_fans team, created game_teams_worst_fans.csv for testing
     game_path = './data/samples/game.csv'
     team_path = './data/samples/team_info.csv'
     game_teams_path = './data/samples/game_teams_worst_fans.csv'
-  
+
     locations = {
       games: game_path,
       teams: team_path,
@@ -181,6 +181,16 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal ["3", "6", "17"], @stat_tracker.group_game_teams_by_team_id.keys
     assert_equal "2012030221", @stat_tracker.group_game_teams_by_team_id["3"][0].game_id
+  end
+
+  def test_it_can_find_most_goals_scored_for_a_particular_team
+
+    assert_equal 6, @stat_tracker.most_goals_scored("17")
+  end
+
+  def test_it_can_find_fewest_goals_scored_for_a_particular_team
+
+    assert_equal 0, @stat_tracker.fewest_goals_scored("17")
   end
 
   def test_it_returns_best_defense
