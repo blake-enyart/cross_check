@@ -359,15 +359,5 @@ class StatTracker
     fewest_goals.goals
   end
 
-  def seasonal_summary(team_id)
-
-  end
-  # For each season that the team has played,
-  # a hash that has two keys (:preseason, and :regular_season),
-  # that each point to a hash with the following
-  # keys: :win_percentage P: R:, :total_goals_scored P: R:, :total_goals_against P: R:,
-  # :average_goals_scored P: R:, :average_goals_against P: R:
-
-
 
 end
