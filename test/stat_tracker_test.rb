@@ -78,7 +78,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_find_team_with_best_fans
-    
+
     assert_equal "Bruins", @stat_tracker.best_fans
   end
 
@@ -155,32 +155,19 @@ class StatTrackerTest < Minitest::Test
 
   #Iteration 4 test
   def test_team_info_returns_attributes_in_hash
-    expected = { abbreviation: "BOS", franchise_id: "6",
-                link: "/api/v1/teams/6", short_name: "Boston",
-                 team_id: "6", team_name: "Bruins" }
+    expected = {:@team_id=>"6", :@franchise_id=>"6", :@short_name=>"Boston", :@team_name=>"Bruins", :@abbreviation=>"BOS", :@link=>"/api/v1/teams/6"}
 
     assert_equal expected, @stat_tracker.team_info("6")
   end
 
   def test_best_season_returns_correctly
-    skip
+
     assert_equal "20122013", @stat_tracker.best_season("3")
   end
 
-  def test_best_season_returns_correctly
+  def test_worst_season_returns_correctly
 
     assert_equal "20132014", @stat_tracker.worst_season("3")
-  end
-
-  def test_it_can_find_team_with_worst_fans
-    skip
-    assert_equal "nil?", @stat_tracker.worst_fans
-  end
-
-  def test_it_can_create_a_hash_of_game_team_objects_by_team_id
-
-    assert_equal ["3", "6", "17"], @stat_tracker.group_game_teams_by_team_id.keys
-    assert_equal "2012030221", @stat_tracker.group_game_teams_by_team_id["3"][0].game_id
   end
 
   def test_it_can_find_most_goals_scored_for_a_particular_team

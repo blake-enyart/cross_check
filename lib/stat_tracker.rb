@@ -1,4 +1,4 @@
-require_relative './class_helper'
+# require_relative './class_helper'
 
 class StatTracker
 
@@ -204,7 +204,7 @@ class StatTracker
         worst_fans_array << team_id
       end
     end
-    worst_fans_array
+
     worst_fans_team_names = []
     @teams.each do |team|
       worst_fans_array.each do |team_id|
@@ -360,6 +360,38 @@ class StatTracker
     convert_team_id_and_team_name(team)
   end
 
+  def worst_defense
+    win_tracker = @teams_hash
+    win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
+
+    game_grouping = @game_teams.group_by { |row| row.game_id }
+    defense_tracker = []
+    game_grouping.each do |game_id, game_array|
+      if game_array.length == 2
+        if game_array[0].hoa == 'home'
+          home_team = game_array[0]
+          away_team = game_array[1]
+        else
+          home_team = game_array[1]
+          away_team = game_array[0]
+        end
+        array = [home_team.team_id, away_team.goals]
+        away_array = [away_team.team_id, home_team.goals]
+        defense_tracker << array
+        defense_tracker << away_array
+      end
+    end
+
+    defense_tracker.each do |score_outcome|
+      win_tracker[score_outcome [0]] += score_outcome[1]
+    end
+    team = win_tracker.max_by do |team_id, goals_against|
+      goals_against
+    end
+    team = team[0]
+    convert_team_id_and_team_name(team)
+  end
+
   def best_season(team_id)
     game_teams_by_season = @game_teams.group_by(&:season)
     game_teams_by_season.each do |season, game_team_array|
@@ -444,74 +476,6 @@ class StatTracker
     wins_per_season
   end
 
-  def worst_fans
-    away_home_win_difference_hash = {}
-    group_game_teams_by_team_id.each do |team_id, game_teams|
-      total_home_games = game_teams.count do |game_team|
-        game_team.hoa == "home"
-      end
-      count_of_home_wins = game_teams.count do |game_team|
-        game_team.hoa == "home" && game_team.won == "TRUE"
-      end
-      total_away_games = game_teams.count do |game_team|
-        game_team.hoa == "away"
-      end
-      count_of_away_wins = game_teams.count do |game_team|
-        game_team.hoa == "away" && game_team.won == "TRUE"
-
-  def worst_defense
-    win_tracker = @teams_hash
-    win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
-
-    game_grouping = @game_teams.group_by { |row| row.game_id }
-    defense_tracker = []
-    game_grouping.each do |game_id, game_array|
-      if game_array.length == 2
-        if game_array[0].hoa == 'home'
-          home_team = game_array[0]
-          away_team = game_array[1]
-        else
-          home_team = game_array[1]
-          away_team = game_array[0]
-        end
-        array = [home_team.team_id, away_team.goals]
-        away_array = [away_team.team_id, home_team.goals]
-        defense_tracker << array
-        defense_tracker << away_array
-      end
-    end
-    away_home_win_difference_hash
-  end
-        
-  # List of names of all teams with better away records
-  # than home records.
-  # Array
-  #     home_away_win_difference_hash[team_id] = home_away_win_difference
-  #   end
-  #     big_difference = home_away_win_difference_hash.select do |team_id, value|
-  #       value == home_away_win_difference_hash.values.max
-  #     end
-  #   team_id = big_difference.keys.first
-  #   team_object = @teams.find do |team|
-  #     team.team_id == team_id
-  #     # binding.pry
-  #   end
-  #   team_object.teamName
-  # end
-
-    defense_tracker.each do |score_outcome|
-      win_tracker[score_outcome [0]] += score_outcome[1]
-    end
-    team = win_tracker.max_by do |team_id, goals_against|
-      goals_against
-    end
-    team = team[0]
-    convert_team_id_and_team_name(team)
-
-  def best_season(team_id)
-
-  end
-
   def most_goals_scored(team_id)
     most_goals = @teams_hash[team_id].max_by do |game_team|
       game_team.goals
@@ -524,6 +488,18 @@ class StatTracker
       game_team.goals
     end
     fewest_goals.goals
+  end
+
+  def team_info(team_id)
+    hash = {}
+    @teams.each do |team|
+      if team.team_id == team_id
+        team.instance_variables.each do |variable|
+          hash[variable] = team.instance_variable_get(variable)
+        end
+      end
+    end
+    hash
   end
 
   def worst_loss
