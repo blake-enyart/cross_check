@@ -511,4 +511,15 @@ class StatTracker
     #Biggest difference between team goals and opponent goals for a win
     # for the given team.
   end
+
+  def seasonal_summary(team_id)
+
+    # return monster_hash
+  end
+  # For each season that the team has played,
+  # a hash that has two keys (:preseason, and :regular_season),
+  # that each point to a hash with the following
+  # keys: :win_percentage P: R:, :total_goals_scored P: R:, :total_goals_against P: R:,
+  # :average_goals_scored P: R:, :average_goals_against P: R:
+
 end
