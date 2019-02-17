@@ -355,6 +355,13 @@ class StatTracker
     most_goals.goals
   end
 
+  def fewest_goals_scored(team_id)
+    fewest_goals = @teams_hash[team_id].min_by do |game_team|
+      game_team.goals
+    end
+    fewest_goals.goals
+  end
+
 
 
 end
