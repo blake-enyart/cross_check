@@ -203,6 +203,6 @@ class StatTrackerTest < Minitest::Test
 
   def test_rival_returns_correctly
 
-    assert_equal "Bruins", @stat_tracker.rival("6")
+    assert_equal "Red Wings", @stat_tracker.rival("6")
   end
 end
