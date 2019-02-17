@@ -225,8 +225,13 @@ class StatTrackerTest < Minitest::Test
         }
       }
     }
-    
+
   assert_equal expected, @stat_tracker.seasonal_summary("6")
+end
+
+def test_win_percentage_seasonal_summary
+
+  assert_equal 0.51, @stat_tracker.win_percentage_seasonal_summary(@stat_tracker.game_teams)
 end
 
 

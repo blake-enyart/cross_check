@@ -540,50 +540,35 @@ class StatTracker
       end
       pre_reg_season_hash[:preseason] = preseason_game_teams
       pre_reg_season_hash[:regular_season] = regular_season_game_teams
-      game_team_season_type_hash[season] = pre_reg_season_hash
-    end
-    game_team_season_type_hash
-    # seasonal_summary_hash = {
-    #   "20122013" => {
-    #     :preseason => {
-    #       :win_percentage=>0.80,
-    #       :total_goals_scored=>16,
-    #       :total_goals_against=>10,
-    #       :average_goals_scored=>3.2,
-    #       :average_goals_against=>2.0
-    #     },
-    #     :regular_season => {
-    #       :win_percentage=>0.33,
-    #       :total_goals_scored=>9,
-    #       :total_goals_against=>9,
-    #       :average_goals_scored=>3.0,
-    #       :average_goals_against=>3.0
-    #       }
-    #     },
-    #     "20132014" => {
-    #       :preseason => {
-    #         :win_percentage=>0.80,
-    #         :total_goals_scored=>14,
-    #         :total_goals_against=>6,
-    #         :average_goals_scored=>2.8,
-    #         :average_goals_against=>1.2
-    #       },
-    #       :regular_season => {
-    #         :win_percentage=>0.67,
-    #         :total_goals_scored=>18,
-    #         :total_goals_against=>16,
-    #         :average_goals_scored=>3.0,
-    #         :average_goals_against=>2.67
-    #       }
-    #     }
-    #   }
 
+      game_team_season_type_hash[season] = {}
+      regular_season_holder_hash = {}
+      regular_season_holder_hash[:win_percentage] = regular_season_game_teams.length
+      regular_season_holder_hash[:total_goals_scored] = 0
+      regular_season_holder_hash[:total_goals_against] = 0
+      regular_season_holder_hash[:average_goals_scored] = 0.0
+      regular_season_holder_hash[:average_goals_against] = 0.0
+      game_team_season_type_hash[season][:regular_season] = regular_season_holder_hash
+
+      preseason_season_holder_hash = {}
+      preseason_season_holder_hash[:win_percentage] = preseason_game_teams.length
+      preseason_season_holder_hash[:total_goals_scored] = 0
+      preseason_season_holder_hash[:total_goals_against] = 0
+      preseason_season_holder_hash[:average_goals_scored] = 0.0
+      preseason_season_holder_hash[:average_goals_against] = 0.0
+      game_team_season_type_hash[season][:preseason] = preseason_season_holder_hash
+    end
     seasonal_summary_hash
   end
-  # For each season that the team has played,
-  # a hash that has two keys (:preseason, and :regular_season),
-  # that each point to a hash with the following
-  # keys: :win_percentage P: R:, :total_goals_scored P: R:, :total_goals_against P: R:,
-  # :average_goals_scored P: R:, :average_goals_against P: R:
+
+  def win_percentage_seasonal_summary(game_team_array)
+    total_games = game_team_array.length
+    total_wins = game_team_array.count do |game_team|
+      game_team.won == "TRUE"
+    end
+    (total_wins.to_f / total_games.to_f).round(2)
+    # return 0.00 total wins/total games
+  end
+
 
 end
