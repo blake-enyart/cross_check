@@ -542,23 +542,26 @@ class StatTracker
       pre_reg_season_hash[:regular_season] = regular_season_game_teams
 
       game_team_season_type_hash[season] = {}
-      regular_season_holder_hash = {}
-      regular_season_holder_hash[:win_percentage] = regular_season_game_teams.length
-      regular_season_holder_hash[:total_goals_scored] = 0
-      regular_season_holder_hash[:total_goals_against] = 0
-      regular_season_holder_hash[:average_goals_scored] = 0.0
-      regular_season_holder_hash[:average_goals_against] = 0.0
-      game_team_season_type_hash[season][:regular_season] = regular_season_holder_hash
 
       preseason_season_holder_hash = {}
-      preseason_season_holder_hash[:win_percentage] = preseason_game_teams.length
-      preseason_season_holder_hash[:total_goals_scored] = 0
+      preseason_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(preseason_game_teams)
+      preseason_season_holder_hash[:total_goals_scored] = total_goals_scored(preseason_game_teams)
       preseason_season_holder_hash[:total_goals_against] = 0
       preseason_season_holder_hash[:average_goals_scored] = 0.0
       preseason_season_holder_hash[:average_goals_against] = 0.0
       game_team_season_type_hash[season][:preseason] = preseason_season_holder_hash
+
+      regular_season_holder_hash = {}
+      regular_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(regular_season_game_teams)
+      regular_season_holder_hash[:total_goals_scored] = total_goals_scored(regular_season_game_teams)
+      regular_season_holder_hash[:total_goals_against] = 0
+      regular_season_holder_hash[:average_goals_scored] = 0.0
+      regular_season_holder_hash[:average_goals_against] = 0.0
+      game_team_season_type_hash[season][:regular_season] = regular_season_holder_hash
     end
-    seasonal_summary_hash
+    game_team_season_type_hash
+
+    # seasonal_summary_hash
   end
 
   def win_percentage_seasonal_summary(game_team_array)
@@ -568,6 +571,12 @@ class StatTracker
     end
     (total_wins.to_f / total_games.to_f).round(2)
     # return 0.00 total wins/total games
+  end
+
+  def total_goals_scored(game_team_array)
+    game_team_array.sum do |game_team|
+      game_team.goals
+    end
   end
 
 

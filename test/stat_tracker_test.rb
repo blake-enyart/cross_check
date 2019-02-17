@@ -234,6 +234,11 @@ def test_win_percentage_seasonal_summary
   assert_equal 0.51, @stat_tracker.win_percentage_seasonal_summary(@stat_tracker.game_teams)
 end
 
+def test_total_goals_scored
+
+  assert_equal 100, @stat_tracker.total_goals_scored(@stat_tracker.game_teams)
+end
+
 
 
 end
