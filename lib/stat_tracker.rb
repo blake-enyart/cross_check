@@ -329,21 +329,78 @@ class StatTracker
     end
   end
 
-  def team_info(team_id)
-    @teams.each do |team|
-      if team.team_id == team_id
-        return { team_id: team.team_id,
-                franchise_id: team.franchise_id,
-                short_name: team.short_name,
-                team_name: team.team_name,
-                abbreviation: team.abbreviation,
-                link: team.link }
+  def best_defense
+    win_tracker = @teams_hash
+    win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
+
+    game_grouping = @game_teams.group_by { |row| row.game_id }
+    defense_tracker = []
+    game_grouping.each do |game_id, game_array|
+      if game_array.length == 2
+        if game_array[0].hoa == 'home'
+          home_team = game_array[0]
+          away_team = game_array[1]
+        else
+          home_team = game_array[1]
+          away_team = game_array[0]
+        end
+        array = [home_team.team_id, away_team.goals]
+        away_array = [away_team.team_id, home_team.goals]
+        defense_tracker << array
+        defense_tracker << away_array
       end
     end
+    defense_tracker.each do |score_outcome|
+      win_tracker[score_outcome [0]] += score_outcome[1]
+    end
+    team = win_tracker.min_by do |team_id, goals_against|
+      goals_against
+    end
+    team = team[0]
+    convert_team_id_and_team_name(team)
   end
+
+  def worst_defense
+    win_tracker = @teams_hash
+    win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
+
+    game_grouping = @game_teams.group_by { |row| row.game_id }
+    defense_tracker = []
+    game_grouping.each do |game_id, game_array|
+      if game_array.length == 2
+        if game_array[0].hoa == 'home'
+          home_team = game_array[0]
+          away_team = game_array[1]
+        else
+          home_team = game_array[1]
+          away_team = game_array[0]
+        end
+        array = [home_team.team_id, away_team.goals]
+        away_array = [away_team.team_id, home_team.goals]
+        defense_tracker << array
+        defense_tracker << away_array
+      end
+    end
+    defense_tracker.each do |score_outcome|
+      win_tracker[score_outcome [0]] += score_outcome[1]
+    end
+    team = win_tracker.max_by do |team_id, goals_against|
+      goals_against
+    end
+    team = team[0]
+    convert_team_id_and_team_name(team)
 
   def best_season(team_id)
+
   end
 
+  def worst_loss
+    #Biggest difference between team goals and opponent goals for a loss
+    #for the given team.
+  end
 
+  def biggest_team_blowout
+    #Biggest difference between team goals and opponent goals for a win
+    # for the given team.
+  end
 end
