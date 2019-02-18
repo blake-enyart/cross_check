@@ -335,18 +335,30 @@ class StatTracker
 
   def winningest_team
     win_tracker = @teams_hash
-    win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
+    win_tracker = win_tracker.each { |team_id,team| win_tracker[team_id] = 0 }
 
-    game_grouping = @game_teams.group_by { |row| row.game_id }
-    game_grouping.each do |game_id, game_array|
-      outcome = win_determination(game_array)
-      if outcome
-        win_tracker[outcome[0]] += outcome[1]
-      end
+    game_grouping = @game_team_pairs
+
+    gp_by_team_id = game_pairs_by_attribute(game_grouping, :team_id)
+
+    gp_by_team_id.each do |team_id, game_pair_array|
+      total_games = game_pair_array.size
+      team_wins = wins_for_team(game_pair_array, team_id)
+      average = (team_wins.to_f/total_games).round(2)
+      win_tracker[team_id] = average
     end
 
-    best_team_id = win_tracker.max_by { |team_id, wins| wins }[0]
+    best_team_id = win_tracker.max_by { |team_id, win_percentage| win_percentage }[0]
     convert_team_id_and_team_name(best_team_id)
+  end
+
+  def game_pairs_by_attribute(game_grouping ,attr_sym)
+    gp_by_attr = Hash.new { |hash, key| hash[key] = [] }
+    game_grouping.each do |game_pair|
+      gp_by_attr[game_pair[0].send(attr_sym)] << game_pair
+      gp_by_attr[game_pair[1].send(attr_sym)] << game_pair
+    end
+    gp_by_attr
   end
 
   def win_determination(game_array)
@@ -848,7 +860,7 @@ class StatTracker
       pre_reg_decrease = win_percent - gp_by_team_id_regular[team_id]
       biggest_surprise[team_id] = pre_reg_decrease
     end
- 
+
     biggest_surprise = biggest_surprise.min_by { |team_id, win_percent| win_percent }[0]
     convert_team_id_and_team_name(biggest_surprise)
   end
