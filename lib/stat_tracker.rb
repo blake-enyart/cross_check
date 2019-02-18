@@ -544,7 +544,7 @@ class StatTracker
       preseason_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(preseason_game_teams)
       preseason_season_holder_hash[:total_goals_against] = total_goals_against_ss(preseason_game_teams, team_id)
       preseason_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(preseason_game_teams)
-      preseason_season_holder_hash[:average_goals_against] = 0.0
+      preseason_season_holder_hash[:average_goals_against] = average_goals_against_ss(preseason_game_teams, team_id)
       game_team_season_type_hash[season][:preseason] = preseason_season_holder_hash
 
       regular_season_holder_hash = {}
@@ -552,7 +552,7 @@ class StatTracker
       regular_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(regular_season_game_teams)
       regular_season_holder_hash[:total_goals_against] = total_goals_against_ss(regular_season_game_teams, team_id)
       regular_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(regular_season_game_teams)
-      regular_season_holder_hash[:average_goals_against] = 0.0
+      regular_season_holder_hash[:average_goals_against] = average_goals_against_ss(regular_season_game_teams, team_id)
       game_team_season_type_hash[season][:regular_season] = regular_season_holder_hash
     end
     game_team_season_type_hash
@@ -592,6 +592,10 @@ class StatTracker
       end
     end
     total_goals_against
+  end
+
+  def average_goals_against_ss(game_team_array, team_id)
+    (total_goals_against_ss(game_team_array, team_id).to_f / game_team_array.length.to_f).round(2)
   end
 
 
