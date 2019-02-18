@@ -19,8 +19,7 @@ class StatTracker
     separate_games = separate_home_and_away_games(game_teams_data)
     @games_home = separate_games[0]
     @games_away = separate_games[1]
-    @teams_hash = group_by_team_id(game_teams_data)
-
+    # @teams_hash = group_by_team_id(game_teams_data)
     diff_seasons = separate_pre_and_regular_season_games(games_data)
     @preseason_games = diff_seasons[0]
     @regular_games = diff_seasons[1]
@@ -260,7 +259,7 @@ class StatTracker
     end
   end
 
-  def average_goals_per_season
+  def average_goals_by_season
     goals_per_season_hash = {}
     games_by_season.each do |season_key, games_array|
       goals_per_season_hash[season_key] = (total_goals(games_array) / games_array.count).round(2)
@@ -276,15 +275,13 @@ class StatTracker
 
   #League Statistics
   def best_offense
-    hash = all_goals_per_team(@teams_hash)
-
+    hash = all_goals_per_team(group_by_team_id(@game_teams))
     best_team_id = hash.max_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(best_team_id)
   end
 
-  def worse_offense
-    hash = all_goals_per_team(@teams_hash)
-
+  def worst_offense
+    hash = all_goals_per_team(group_by_team_id(@game_teams))
     worst_team_id = hash.min_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(worst_team_id)
   end
@@ -334,9 +331,8 @@ class StatTracker
   end
 
   def winningest_team
-    win_tracker = @teams_hash
+    win_tracker = group_by_team_id(@game_teams)
     win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
-
     game_grouping = @game_teams.group_by { |row| row.game_id }
     game_grouping.each do |game_id, game_array|
       outcome = win_determination(game_array)
@@ -368,9 +364,8 @@ class StatTracker
   end
 
   def best_defense
-    win_tracker = @teams_hash
+    win_tracker = group_by_team_id(@game_teams)
     win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
-
     game_grouping = @game_teams.group_by { |row| row.game_id }
     defense_tracker = []
     game_grouping.each do |game_id, game_array|
@@ -399,9 +394,8 @@ class StatTracker
   end
 
   def worst_defense
-    win_tracker = @teams_hash
+    win_tracker = group_by_team_id(@game_teams)
     win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
-
     game_grouping = @game_teams.group_by { |row| row.game_id }
     defense_tracker = []
     game_grouping.each do |game_id, game_array|
@@ -515,14 +509,14 @@ class StatTracker
   end
 
   def most_goals_scored(team_id)
-    most_goals = @teams_hash[team_id].max_by do |game_team|
+    most_goals = group_by_team_id(@game_teams)[team_id].max_by do |game_team|
       game_team.goals
     end
     most_goals.goals
   end
 
   def fewest_goals_scored(team_id)
-    fewest_goals = @teams_hash[team_id].min_by do |game_team|
+    fewest_goals = group_by_team_id(@game_teams)[team_id].min_by do |game_team|
       game_team.goals
     end
     fewest_goals.goals
@@ -852,12 +846,28 @@ class StatTracker
   end
 
   def head_to_head(team_id)
-    games_by_team_id = @game_teams.group_by do |game_team|
-      game_team.team_id
+    games_played_by_team = @game_teams.find_all do |game_team|
+      game_team.team_id == team_id
     end
-    # games_by_team_id.find_all do |game_team|
-    #   game_team
+    opposing_team_id_info = []
+    games_played_by_team.each do |team_id_game_team|
+      game_team_pairs = @game_teams.find_all do |game_team|
+        game_team.game_id == team_id_game_team.game_id
+      end
+      game_team_pairs.each do |one_game_team|
+        if one_game_team.team_id != team_id
+          opposing_team_id_info << [one_game_team.team_id, one_game_team.won]
+        end
+      end
+    end
+    opposing_team_by_won = opposing_team_id_info.group_by do |opposing_team_info|
+      opposing_team_info[0]
+    end
+    # opposing_team_by_won.each do |team, won_status|
+    #
     # binding.pry
+
+    # opponent  won or lost
   end
 
   # def win_percentage_seasonal_summary(game_team_array)
