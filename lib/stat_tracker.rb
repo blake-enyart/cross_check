@@ -850,4 +850,43 @@ class StatTracker
     biggest_surprise = biggest_surprise.min_by { |team_id, win_percent| win_percent }[0]
     convert_team_id_and_team_name(biggest_surprise)
   end
+
+  def head_to_head(team_id)
+    games_by_team_id = @game_teams.group_by do |game_team|
+      game_team.team_id
+    end
+    # games_by_team_id.find_all do |game_team|
+    #   game_team
+    # binding.pry
+  end
+
+  # def win_percentage_seasonal_summary(game_team_array)
+  #   total_games = game_team_array.length
+  #   total_wins = game_team_array.count do |game_team|
+  #     game_team.won == "TRUE"
+  #   end
+  #   (total_wins.to_f / total_games.to_f).round(2)
+  # end
+
+  # def convert_team_id_and_team_name(team)
+  #   name = nil
+  #   @teams.each do |row|
+  #     if team == row.team_id
+  #       name = row.team_name
+  #     elsif team == row.team_name
+  #       name = row.team_id
+  #     end
+  #   end
+  #   name
+  # end
+
+  # def average_win_percentage(team_id)
+  #   sort = sort_game_team_pairs_by_attribute_and_select(:team_id, team_id)
+  #   total_games = sort[team_id].size
+  #
+  #   total_wins = wins_for_team(sort[team_id], team_id)
+  #   average_win = (total_wins.to_f/total_games)*100
+  #   average_win.round(2)
+  # end
+
 end

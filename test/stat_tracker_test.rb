@@ -284,6 +284,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_biggest_best_returns_correctly
+    skip
     game_path = './data/game.csv'
     team_path = './data/team_info.csv'
     game_teams_path = './data/game_teams_stats.csv'
@@ -300,6 +301,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_biggest_surprise_returns_correctly
+    skip
     game_path = './data/game.csv'
     team_path = './data/team_info.csv'
     game_teams_path = './data/game_teams_stats.csv'
@@ -313,6 +315,14 @@ class StatTrackerTest < Minitest::Test
     stat_tracker = StatTracker.from_csv(locations)
 
     assert_equal "Canucks", stat_tracker.biggest_surprise("20122013")
+  end
+
+  def test_it_can_calculate_head_to_head
+    expected = {
+      "Rangers" => 0.27,
+      "Red Wings" => 0.44
+    }
+    assert_equal expected, @stat_tracker.head_to_head("6")
   end
 
 end
