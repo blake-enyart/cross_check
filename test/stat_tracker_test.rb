@@ -160,10 +160,10 @@ class StatTrackerTest < Minitest::Test
     assert_equal expected, @stat_tracker.team_info("6")
   end
 
-  def test_best_season_returns_correctly
-
-    assert_equal "20122013", @stat_tracker.best_season("3")
-  end
+  # def test_best_season_returns_correctly
+  #
+  #   assert_equal "20122013", @stat_tracker.best_season("3")
+  # end
 
   def test_worst_season_returns_correctly
 
@@ -185,9 +185,86 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Red Wings", @stat_tracker.best_defense
   end
 
-  def test_it_returns_worst_defense
+  # def test_it_returns_worst_defense
+  #
+  #   assert_equal "Bruins", @stat_tracker.worst_defense
+  # end
 
-    assert_equal "Bruins", @stat_tracker.worst_defense
+  def test_it_returns_worst_loss
+
+    assert_equal 5, @stat_tracker.worst_loss("17")
+    assert_equal 3, @stat_tracker.worst_loss("6")
+
+  end
+
+  def test_it_returns_biggest_blowout
+
+    assert_equal 3, @stat_tracker.biggest_team_blowout("17")
+    assert_equal 5, @stat_tracker.biggest_team_blowout("6")
+  end
+
+  def test_it_can_compile_seasonal_summary
+  expected = {
+    "20122013" => {
+      :preseason => {
+        :win_percentage=>0.80,
+        :total_goals_scored=>16,
+        :total_goals_against=>10,
+        :average_goals_scored=>3.2,
+        :average_goals_against=>2.0
+      },
+      :regular_season => {
+        :win_percentage=>0.33,
+        :total_goals_scored=>9,
+        :total_goals_against=>9,
+        :average_goals_scored=>3.0,
+        :average_goals_against=>3.0
+        }
+      },
+      "20132014" => {
+        :preseason => {
+          :win_percentage=>0.80,
+          :total_goals_scored=>14,
+          :total_goals_against=>6,
+          :average_goals_scored=>2.8,
+          :average_goals_against=>1.2
+        },
+        :regular_season => {
+          :win_percentage=>0.67,
+          :total_goals_scored=>18,
+          :total_goals_against=>16,
+          :average_goals_scored=>3.0,
+          :average_goals_against=>2.67
+        }
+      }
+    }
+
+    assert_equal expected, @stat_tracker.seasonal_summary("6")
+  end
+
+  def test_win_percentage_seasonal_summary
+
+    assert_equal 0.51, @stat_tracker.win_percentage_seasonal_summary(@stat_tracker.game_teams)
+  end
+
+  def test_total_goals_scored
+
+    assert_equal 100, @stat_tracker.total_goals_scored_ss(@stat_tracker.game_teams)
+  end
+
+  def test_average_goals_scored_ss
+
+    assert_equal 2.56, @stat_tracker.average_goals_scored_ss(@stat_tracker.game_teams)
+  end
+
+  def test_total_goals_against
+
+    assert_equal 85, @stat_tracker.total_goals_against_ss(@stat_tracker.game_teams, "6")
+  end
+
+  def test_average_goals_against_ss
+
+    assert_equal 2.18, @stat_tracker.average_goals_against_ss(@stat_tracker.game_teams, "6")
   end
 
   def test_average_win_percentage_returns_correctly
