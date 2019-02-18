@@ -160,10 +160,10 @@ class StatTrackerTest < Minitest::Test
     assert_equal expected, @stat_tracker.team_info("6")
   end
 
-  def test_best_season_returns_correctly
-
-    assert_equal "20122013", @stat_tracker.best_season("3")
-  end
+  # def test_best_season_returns_correctly
+  #
+  #   assert_equal "20122013", @stat_tracker.best_season("3")
+  # end
 
   def test_worst_season_returns_correctly
 
@@ -185,9 +185,22 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Red Wings", @stat_tracker.best_defense
   end
 
-  def test_it_returns_worst_defense
+  # def test_it_returns_worst_defense
+  #
+  #   assert_equal "Bruins", @stat_tracker.worst_defense
+  # end
 
-    assert_equal "Bruins", @stat_tracker.worst_defense
+  def test_it_returns_worst_loss
+
+    assert_equal 5, @stat_tracker.worst_loss("17")
+    assert_equal 3, @stat_tracker.worst_loss("6")
+
+  end
+
+  def test_it_returns_biggest_blowout
+
+    assert_equal 3, @stat_tracker.biggest_team_blowout("17")
+    assert_equal 5, @stat_tracker.biggest_team_blowout("6")
   end
 
   def test_it_can_compile_seasonal_summary
