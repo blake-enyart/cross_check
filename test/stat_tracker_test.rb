@@ -192,6 +192,14 @@ class StatTrackerTest < Minitest::Test
 
   def test_it_returns_worst_loss
 
-    assert_equal 5, @stat_tracker.worst_loss("6")
+    assert_equal 5, @stat_tracker.worst_loss("17")
+    assert_equal 3, @stat_tracker.worst_loss("6")
+
+  end
+
+  def test_it_returns_biggest_blowout
+
+    assert_equal 3, @stat_tracker.biggest_team_blowout("17")
+    assert_equal 5, @stat_tracker.biggest_team_blowout("6")
   end
 end

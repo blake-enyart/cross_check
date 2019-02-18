@@ -571,20 +571,42 @@ class StatTracker
   end
 
   def worst_loss(team_id)
-    worst_performance = []
+    away_tracker = []
+    home_tracker = []
     @games.each do |game|
-      worst_performance << (game.home_goals.to_i - game.away_goals.to_i)
+      if game.away_team_id == team_id
+        away_tracker << game
+      elsif game.home_team_id == team_id
+        home_tracker << game
+      end
     end
-    worst_performance.max
+    diff = []
+    away_tracker.each do |game|
+      diff << (game.away_goals - game.home_goals)
+    end
+    home_tracker.each do |game|
+      diff << (game.home_goals - game.away_goals)
+    end
+    diff.max
   end
-    # @games.each do |away_team_id, away_goals|
-    #   away_goals.count
-    # end
-    #team =
-    #convert_team_id_and_team_name(team)
 
-  # def biggest_team_blowout
-  #   #Biggest difference between team goals and opponent goals for a win
-  #   # for the given team.
-  # end
+  def biggest_team_blowout(team_id)
+    away_tracker = []
+    home_tracker = []
+    @games.each do |game|
+      if game.away_team_id == team_id
+        away_tracker << game
+      elsif game.home_team_id == team_id
+        home_tracker << game
+      end
+    end
+    diff = []
+    away_tracker.each do |game|
+      diff << (game.away_goals - game.home_goals)
+    end
+    home_tracker.each do |game|
+      diff << (game.home_goals - game.away_goals)
+    end
+    diff.min.abs
+  end
 end
