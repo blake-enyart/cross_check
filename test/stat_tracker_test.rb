@@ -272,4 +272,14 @@ class StatTrackerTest < Minitest::Test
     assert_equal 68.42, @stat_tracker.average_win_percentage("6")
     assert_equal 27.27, @stat_tracker.average_win_percentage("3")
   end
+
+  def test_favorite_opponent_returns_correctly
+
+    assert_equal "Rangers", @stat_tracker.favorite_opponent("6")
+  end
+
+  def test_rival_returns_correctly
+
+    assert_equal "Red Wings", @stat_tracker.rival("6")
+  end
 end

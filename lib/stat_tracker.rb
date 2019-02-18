@@ -697,7 +697,6 @@ class StatTracker
   end
 
   def average_win_percentage(team_id)
-    games_for_team = @teams_hash[team_id]
     sort = sort_game_team_pairs_by_attribute_and_select(:team_id, team_id)
     total_games = sort[team_id].size
 
@@ -718,12 +717,62 @@ class StatTracker
       end
     end
 
-    hash = Hash.new { |hash, key| hash[key] = [] }
+    selection_hash = Hash.new { |hash, key| hash[key] = [] }
     game_grouping.each do |game_pair|
       if game_pair[0].send(attr_sym) == selection || game_pair[1].send(attr_sym) == selection
-        hash[selection] << game_pair
+        selection_hash[selection] << game_pair
       end
     end
-    hash
+
+    selection_hash
   end
+
+  def favorite_opponent(team_id)
+    selected_game_pairs = sort_game_team_pairs_by_attribute_and_select(:team_id, team_id)[team_id]
+
+    game_pairs_hash = Hash.new { |hash, key| hash[key] = [] }
+    selected_game_pairs.each do |game_pair|
+      if game_pair[0].team_id != team_id
+        game_pairs_hash[game_pair[0].team_id] << game_pair
+      elsif game_pair[1].team_id != team_id
+        game_pairs_hash[game_pair[1].team_id] << game_pair
+      end
+    end
+
+    game_pairs_hash.each do |team_id_opponent, game_pair_array|
+      total_games = game_pair_array.size
+      total_wins = wins_for_team(game_pair_array, team_id)
+      average_win = (total_wins.to_f/total_games)*100
+      average_win = average_win.round(2)
+      game_pairs_hash[team_id_opponent] = average_win
+    end
+
+    favorite_opponent = game_pairs_hash.max_by { |team_id_opponent, win_percentage| win_percentage }[0]
+    convert_team_id_and_team_name(favorite_opponent)
+  end
+
+  def rival(team_id)
+    selected_game_pairs = sort_game_team_pairs_by_attribute_and_select(:team_id, team_id)[team_id]
+
+    game_pairs_hash = Hash.new { |hash, key| hash[key] = [] }
+    selected_game_pairs.each do |game_pair|
+      if game_pair[0].team_id != team_id
+        game_pairs_hash[game_pair[0].team_id] << game_pair
+      elsif game_pair[1].team_id != team_id
+        game_pairs_hash[game_pair[1].team_id] << game_pair
+      end
+    end
+
+    game_pairs_hash.each do |team_id_opponent, game_pair_array|
+      total_games = game_pair_array.size
+      total_wins = wins_for_team(game_pair_array, team_id)
+      average_win = (total_wins.to_f/total_games)*100
+      average_win = average_win.round(2)
+      game_pairs_hash[team_id_opponent] = average_win
+    end
+
+    favorite_opponent = game_pairs_hash.min_by { |team_id_opponent, win_percentage| win_percentage }[0]
+    convert_team_id_and_team_name(favorite_opponent)
+  end
+
 end
