@@ -6,15 +6,53 @@ class StatTracker
               :teams,
               :game_teams,
               :games_home,
-              :games_away
+              :games_away,
+              :preseason_games,
+              :regular_games,
+              :game_team_pairs
 
   def initialize(games_data, teams_data, game_teams_data)
     @games = games_data
     @teams = teams_data
     @game_teams = game_teams_data
-    @games_home = separate_home_and_away_games(game_teams_data)[0]
-    @games_away = separate_home_and_away_games(game_teams_data)[1]
+
+    separate_games = separate_home_and_away_games(game_teams_data)
+    @games_home = separate_games[0]
+    @games_away = separate_games[1]
     @teams_hash = group_by_team_id(game_teams_data)
+
+    diff_seasons = separate_pre_and_regular_season_games(games_data)
+    @preseason_games = diff_seasons[0]
+    @regular_games = diff_seasons[1]
+
+    @game_team_pairs = group_game_team_objects(game_teams_data)
+  end
+
+  def group_game_team_objects(game_teams_data)
+    sort_game_teams = @game_teams.sort_by(&:game_id)
+
+    game_grouping = []
+    sort_game_teams.each_with_index do |game_team, index|
+      if sort_game_teams[index+1] != nil
+        if game_team.game_id == sort_game_teams[index+1].game_id
+          game_grouping << [game_team, sort_game_teams[index+1]]
+        end
+      end
+    end
+    game_grouping
+  end
+
+  def separate_pre_and_regular_season_games(games_data)
+    preseason = []
+    regular = []
+    games_data.each do |game|
+      if game.type == "P"
+        preseason << game
+      elsif game.type == "R"
+        regular << game
+      end
+    end
+    [preseason, regular]
   end
 
   def group_by_team_id(game_teams_data)
@@ -590,5 +628,24 @@ class StatTracker
 
     favorite_opponent = game_pairs_hash.min_by { |team_id_opponent, win_percentage| win_percentage }[0]
     convert_team_id_and_team_name(favorite_opponent)
+  end
+
+  def biggest_bust(season)
+    selected_game_pairs = @game_team_pairs.select do |game_pair|
+      game_pair[0].season == season
+    end
+
+    regular_games = []
+    preseason_games = []
+
+    selected_game_pairs.each do |game_pair|
+      if game_pair[0].game_id[4..5] == '02'
+        regular_games << game_pair
+      elsif game_pair[0].game_id[4..5] == '03'
+        preseason_games << game_pair
+      end
+    end
+
+    
   end
 end
