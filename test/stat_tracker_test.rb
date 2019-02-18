@@ -218,7 +218,7 @@ class StatTrackerTest < Minitest::Test
     }
 
     stat_tracker = StatTracker.from_csv(locations)
-    
-    assert_equal "?", stat_tracker.biggest_bust("20122013")
+
+    assert_equal "Sharks", stat_tracker.biggest_bust("20122013")
   end
 end

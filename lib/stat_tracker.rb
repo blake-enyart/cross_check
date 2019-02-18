@@ -646,6 +646,41 @@ class StatTracker
       end
     end
 
-    
+    gp_by_team_id_regular = Hash.new { |hash, key| hash[key] = [] }
+    regular_games.each do |game_pair|
+      gp_by_team_id_regular[game_pair[0].team_id] << game_pair
+      gp_by_team_id_regular[game_pair[1].team_id] << game_pair
+    end
+
+    gp_by_team_id_regular.each do |team_id, game_pair_array|
+      total_games = game_pair_array.size
+      total_wins = wins_for_team(game_pair_array, team_id)
+      average_win = (total_wins.to_f/total_games)*100
+      average_win = average_win.round(2)
+      gp_by_team_id_regular[team_id] = average_win
+    end
+
+    gp_by_team_id_preseason = Hash.new { |hash, key| hash[key] = [] }
+    preseason_games.each do |game_pair|
+      gp_by_team_id_preseason[game_pair[0].team_id] << game_pair
+      gp_by_team_id_preseason[game_pair[1].team_id] << game_pair
+    end
+
+    gp_by_team_id_preseason.each do |team_id, game_pair_array|
+      total_games = game_pair_array.size
+      total_wins = wins_for_team(game_pair_array, team_id)
+      average_win = (total_wins.to_f/total_games)*100
+      average_win = average_win.round(2)
+      gp_by_team_id_preseason[team_id] = average_win
+    end
+
+    biggest_bust = {}
+    gp_by_team_id_preseason.each do |team_id, win_percent|
+      pre_reg_decrease = win_percent - gp_by_team_id_regular[team_id]
+      biggest_bust[team_id] = pre_reg_decrease
+    end
+
+    biggest_bust = biggest_bust.max_by { |team_id, win_percent| win_percent }[0]
+    convert_team_id_and_team_name(biggest_bust)
   end
 end
