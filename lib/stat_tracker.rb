@@ -1,4 +1,4 @@
-# require_relative './class_helper'
+require_relative './class_helper'
 
 class StatTracker
 
@@ -476,6 +476,74 @@ class StatTracker
     wins_for_team
   end
 
+  # def worst_fans
+  #   away_home_win_difference_hash = {}
+  #   group_game_teams_by_team_id.each do |team_id, game_teams|
+  #     total_home_games = game_teams.count do |game_team|
+  #       game_team.hoa == "home"
+  #     end
+  #     count_of_home_wins = game_teams.count do |game_team|
+  #       game_team.hoa == "home" && game_team.won == "TRUE"
+  #     end
+  #     total_away_games = game_teams.count do |game_team|
+  #       game_team.hoa == "away"
+  #     end
+  #     count_of_away_wins = game_teams.count do |game_team|
+  #       game_team.hoa == "away" && game_team.won == "TRUE"
+
+  def worst_defense
+    win_tracker = @teams_hash
+    win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
+
+    game_grouping = @game_teams.group_by { |row| row.game_id }
+    defense_tracker = []
+    game_grouping.each do |game_id, game_array|
+      if game_array.length == 2
+        if game_array[0].hoa == 'home'
+          home_team = game_array[0]
+          away_team = game_array[1]
+        else
+          home_team = game_array[1]
+          away_team = game_array[0]
+        end
+        array = [home_team.team_id, away_team.goals]
+        away_array = [away_team.team_id, home_team.goals]
+        defense_tracker << array
+        defense_tracker << away_array
+      end
+    end
+    away_home_win_difference_hash
+  end
+
+  # List of names of all teams with better away records
+  # than home records.
+  # Array
+  #     home_away_win_difference_hash[team_id] = home_away_win_difference
+  #   end
+  #     big_difference = home_away_win_difference_hash.select do |team_id, value|
+  #       value == home_away_win_difference_hash.values.max
+  #     end
+  #   team_id = big_difference.keys.first
+  #   team_object = @teams.find do |team|
+  #     team.team_id == team_id
+  #     # binding.pry
+  #   end
+  #   team_object.teamName
+  # end
+
+    # defense_tracker.each do |score_outcome|
+    #   win_tracker[score_outcome [0]] += score_outcome[1]
+    # end
+    # team = win_tracker.max_by do |team_id, goals_against|
+    #   goals_against
+    # end
+    # team = team[0]
+    # convert_team_id_and_team_name(team)
+
+  def best_season(team_id)
+
+  end
+
   def most_goals_scored(team_id)
     most_goals = @teams_hash[team_id].max_by do |game_team|
       game_team.goals
@@ -502,14 +570,130 @@ class StatTracker
     hash
   end
 
-  def worst_loss
-    #Biggest difference between team goals and opponent goals for a loss
-    #for the given team.
+  def worst_loss(team_id)
+    away_tracker = []
+    home_tracker = []
+    @games.each do |game|
+      if game.away_team_id == team_id
+        away_tracker << game
+      elsif game.home_team_id == team_id
+        home_tracker << game
+      end
+    end
+    diff = []
+    away_tracker.each do |game|
+      diff << (game.away_goals - game.home_goals)
+    end
+    home_tracker.each do |game|
+      diff << (game.home_goals - game.away_goals)
+    end
+    diff.max
   end
 
-  def biggest_team_blowout
-    #Biggest difference between team goals and opponent goals for a win
-    # for the given team.
+  def biggest_team_blowout(team_id)
+    away_tracker = []
+    home_tracker = []
+    @games.each do |game|
+      if game.away_team_id == team_id
+        away_tracker << game
+      elsif game.home_team_id == team_id
+        home_tracker << game
+      end
+    end
+    diff = []
+    away_tracker.each do |game|
+      diff << (game.away_goals - game.home_goals)
+    end
+    home_tracker.each do |game|
+      diff << (game.home_goals - game.away_goals)
+    end
+    diff.min.abs
+  end
+
+  def seasonal_summary(team_id)
+    seasonal_summary_hash = {}
+
+    game_teams_by_team_id = @game_teams.find_all do |game_team|
+      game_team.team_id == team_id
+    end
+
+    game_teams_by_season_hash = game_teams_by_team_id.group_by do |game_team|
+      game_team.season
+    end
+
+    pre_reg_season_hash = {}
+    game_team_season_type_hash = {}
+    game_teams_by_season_hash.each do |season, game_teams|
+      preseason_game_teams = game_teams.find_all do |game_team|
+        #example: game_id "2012030223" "2012" = season; "03" = preseason/playoff id, "0223" = game identifier(not important)
+        #of "03" preseason id, "3" is [5] index; "02" = regular season id
+        game_team.game_id[5] == "3"
+      end
+      regular_season_game_teams = game_teams.find_all do |game_team|
+        game_team.game_id[5] == "2"
+      end
+      pre_reg_season_hash[:preseason] = preseason_game_teams
+      pre_reg_season_hash[:regular_season] = regular_season_game_teams
+
+      game_team_season_type_hash[season] = {}
+
+      preseason_season_holder_hash = {}
+      preseason_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(preseason_game_teams)
+      preseason_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(preseason_game_teams)
+      preseason_season_holder_hash[:total_goals_against] = total_goals_against_ss(preseason_game_teams, team_id)
+      preseason_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(preseason_game_teams)
+      preseason_season_holder_hash[:average_goals_against] = average_goals_against_ss(preseason_game_teams, team_id)
+      game_team_season_type_hash[season][:preseason] = preseason_season_holder_hash
+
+      regular_season_holder_hash = {}
+      regular_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(regular_season_game_teams)
+      regular_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(regular_season_game_teams)
+      regular_season_holder_hash[:total_goals_against] = total_goals_against_ss(regular_season_game_teams, team_id)
+      regular_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(regular_season_game_teams)
+      regular_season_holder_hash[:average_goals_against] = average_goals_against_ss(regular_season_game_teams, team_id)
+      game_team_season_type_hash[season][:regular_season] = regular_season_holder_hash
+    end
+    game_team_season_type_hash
+
+    # seasonal_summary_hash
+  end
+
+  def win_percentage_seasonal_summary(game_team_array)
+    total_games = game_team_array.length
+    total_wins = game_team_array.count do |game_team|
+      game_team.won == "TRUE"
+    end
+    (total_wins.to_f / total_games.to_f).round(2)
+  end
+
+  def total_goals_scored_ss(game_team_array)
+    game_team_array.sum do |game_team|
+      game_team.goals
+    end
+  end
+
+  def average_goals_scored_ss(game_team_array)
+    (total_goals_scored_ss(game_team_array).to_f / game_team_array.length.to_f).round(2)
+  end
+
+  def total_goals_against_ss(game_team_array, team_id)
+    total_goals_against = 0
+    game_team_array.each do |game_team|
+      @games.each do |game|
+        if game.game_id == game_team.game_id
+          if team_id == game.away_team_id
+            total_goals_against += game.home_goals
+          else
+            total_goals_against += game.away_goals
+          end
+        end
+      end
+    end
+    total_goals_against
+  end
+
+  def average_goals_against_ss(game_team_array, team_id)
+    (total_goals_against_ss(game_team_array, team_id).to_f / game_team_array.length.to_f).round(2)
   end
 
   def average_win_percentage(team_id)
@@ -520,7 +704,6 @@ class StatTracker
     average_win = (total_wins.to_f/total_games)*100
     average_win.round(2)
   end
-
 
   def sort_game_team_pairs_by_attribute_and_select(attr_sym, selection)
     sort_game_teams = @game_teams.sort_by(&:game_id)
@@ -591,4 +774,5 @@ class StatTracker
     favorite_opponent = game_pairs_hash.min_by { |team_id_opponent, win_percentage| win_percentage }[0]
     convert_team_id_and_team_name(favorite_opponent)
   end
+
 end
