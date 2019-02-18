@@ -293,43 +293,45 @@ class StatTracker
     hash = {}
     teams_hash.each do |team_id, games_array|
       team_goals = 0
+      total_games = games_array.size
       games_array.each do |game|
         team_goals += game.goals.to_i
       end
-      hash[team_id] = team_goals
+      average_goals_per_game = (team_goals.to_f/total_games).round(2)
+      hash[team_id] = average_goals_per_game
     end
     hash
   end
 
   def highest_scoring_visitor
     sorted_away_games = group_by_team_id(@games_away)
-    sorted_with_scores = all_goals_per_team(sorted_away_games)
+    team_id_with_average_goals = all_goals_per_team(sorted_away_games)
 
-    best_team_id = sorted_with_scores.max_by { |team_id, team_goals| team_goals }[0]
+    best_team_id = team_id_with_average_goals.max_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(best_team_id)
   end
 
   def highest_scoring_home_team
     sorted_home_games = group_by_team_id(@games_home)
-    sorted_with_scores = all_goals_per_team(sorted_home_games)
+    team_id_with_average_goals = all_goals_per_team(sorted_home_games)
 
-    best_team_id = sorted_with_scores.max_by { |team_id, team_goals| team_goals }[0]
+    best_team_id = team_id_with_average_goals.max_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(best_team_id)
   end
 
   def lowest_scoring_visitor
     sorted_away_games = group_by_team_id(@games_away)
-    sorted_with_scores = all_goals_per_team(sorted_away_games)
+    team_id_with_average_goals = all_goals_per_team(sorted_away_games)
 
-    worst_team_id = sorted_with_scores.min_by { |team_id, team_goals| team_goals }[0]
+    worst_team_id = team_id_with_average_goals.min_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(worst_team_id)
   end
 
   def lowest_scoring_home_team
     sorted_home_games = group_by_team_id(@games_home)
-    sorted_with_scores = all_goals_per_team(sorted_home_games)
+    team_id_with_average_goals = all_goals_per_team(sorted_home_games)
 
-    worst_team_id = sorted_with_scores.min_by { |team_id, team_goals| team_goals }[0]
+    worst_team_id = team_id_with_average_goals.min_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(worst_team_id)
   end
 
