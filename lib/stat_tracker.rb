@@ -624,8 +624,6 @@ class StatTracker
       game_team_season_type_hash[season][:regular_season] = regular_season_holder_hash
     end
     game_team_season_type_hash
-
-    # seasonal_summary_hash
   end
 
   def win_percentage_seasonal_summary(game_team_array)
@@ -848,7 +846,7 @@ class StatTracker
       pre_reg_decrease = win_percent - gp_by_team_id_regular[team_id]
       biggest_surprise[team_id] = pre_reg_decrease
     end
- 
+
     biggest_surprise = biggest_surprise.min_by { |team_id, win_percent| win_percent }[0]
     convert_team_id_and_team_name(biggest_surprise)
   end
