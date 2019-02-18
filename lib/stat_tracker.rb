@@ -518,10 +518,6 @@ class StatTracker
     game_teams_by_team_id = @game_teams.find_all do |game_team|
       game_team.team_id == team_id
     end
-    # game_teams_by_team_id.each do |game_team|
-    #   seasonal_summary_hash[game_team.season] = {}
-    # end
-    # seasonal_summary_hash
 
     game_teams_by_season_hash = game_teams_by_team_id.group_by do |game_team|
       game_team.season
@@ -546,7 +542,7 @@ class StatTracker
       preseason_season_holder_hash = {}
       preseason_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(preseason_game_teams)
       preseason_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(preseason_game_teams)
-      preseason_season_holder_hash[:total_goals_against] = 0
+      preseason_season_holder_hash[:total_goals_against] = total_goals_against_ss(preseason_game_teams, team_id)
       preseason_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(preseason_game_teams)
       preseason_season_holder_hash[:average_goals_against] = 0.0
       game_team_season_type_hash[season][:preseason] = preseason_season_holder_hash
@@ -554,7 +550,7 @@ class StatTracker
       regular_season_holder_hash = {}
       regular_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(regular_season_game_teams)
       regular_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(regular_season_game_teams)
-      regular_season_holder_hash[:total_goals_against] = 0
+      regular_season_holder_hash[:total_goals_against] = total_goals_against_ss(regular_season_game_teams, team_id)
       regular_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(regular_season_game_teams)
       regular_season_holder_hash[:average_goals_against] = 0.0
       game_team_season_type_hash[season][:regular_season] = regular_season_holder_hash
@@ -580,6 +576,22 @@ class StatTracker
 
   def average_goals_scored_ss(game_team_array)
     (total_goals_scored_ss(game_team_array).to_f / game_team_array.length.to_f).round(2)
+  end
+
+  def total_goals_against_ss(game_team_array, team_id)
+    total_goals_against = 0
+    game_team_array.each do |game_team|
+      @games.each do |game|
+        if game.game_id == game_team.game_id
+          if team_id == game.away_team_id
+            total_goals_against += game.home_goals
+          else
+            total_goals_against += game.away_goals
+          end
+        end
+      end
+    end
+    total_goals_against
   end
 
 

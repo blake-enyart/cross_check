@@ -226,23 +226,28 @@ class StatTrackerTest < Minitest::Test
       }
     }
 
-  assert_equal expected, @stat_tracker.seasonal_summary("6")
-end
+    assert_equal expected, @stat_tracker.seasonal_summary("6")
+  end
 
-def test_win_percentage_seasonal_summary
+  def test_win_percentage_seasonal_summary
 
-  assert_equal 0.51, @stat_tracker.win_percentage_seasonal_summary(@stat_tracker.game_teams)
-end
+    assert_equal 0.51, @stat_tracker.win_percentage_seasonal_summary(@stat_tracker.game_teams)
+  end
 
-def test_total_goals_scored
+  def test_total_goals_scored
 
-  assert_equal 100, @stat_tracker.total_goals_scored_ss(@stat_tracker.game_teams)
-end
+    assert_equal 100, @stat_tracker.total_goals_scored_ss(@stat_tracker.game_teams)
+  end
 
-def test_average_goals_scored_ss
+  def test_average_goals_scored_ss
 
-  assert_equal 2.56, @stat_tracker.average_goals_scored_ss(@stat_tracker.game_teams)
-end
+    assert_equal 2.56, @stat_tracker.average_goals_scored_ss(@stat_tracker.game_teams)
+  end
+
+  def test_total_goals_against
+
+    assert_equal 85, @stat_tracker.total_goals_against_ss(@stat_tracker.game_teams, "6")
+  end
 
 
 
