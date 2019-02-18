@@ -1,4 +1,4 @@
-# require_relative './class_helper'
+require_relative './class_helper'
 
 class StatTracker
 
@@ -416,16 +416,16 @@ class StatTracker
       end
     end
 
-    wins_per_season = Hash.new { |hash, key| hash[key] = 0 }
+    wins_for_team = Hash.new { |hash, key| hash[key] = 0 }
     game_teams_by_season.keys.each do |season|
-      wins_per_season[season]
+      wins_for_team[season]
     end
 
     game_teams_by_season.each do |season, game_pair_array|
-      wins_per_season[season] = wins_per_season(game_pair_array, team_id)
+      wins_for_team[season] = wins_for_team(game_pair_array, team_id)
     end
 
-    wins_per_season.max_by { |season, wins| wins }[0]
+    wins_for_team.max_by { |season, wins| wins }[0]
   end
 
   def worst_season(team_id)
@@ -452,28 +452,28 @@ class StatTracker
       end
     end
 
-    wins_per_season = Hash.new { |hash, key| hash[key] = 0 }
+    wins_for_team = Hash.new { |hash, key| hash[key] = 0 }
     game_teams_by_season.keys.each do |season|
-      wins_per_season[season]
+      wins_for_team[season]
     end
 
     game_teams_by_season.each do |season, game_pair_array|
-      wins_per_season[season] = wins_per_season(game_pair_array, team_id)
+      wins_for_team[season] = wins_for_team(game_pair_array, team_id)
     end
 
-    wins_per_season.min_by { |season, wins| wins }[0]
+    wins_for_team.min_by { |season, wins| wins }[0]
   end
 
-  def wins_per_season(game_pair_array, team_id)
-    wins_per_season = 0
+  def wins_for_team(game_pair_array, team_id)
+    wins_for_team = 0
 
     game_pair_array.each do |game_pair|
       outcome = win_determination(game_pair)
       if outcome[0] == team_id
-        wins_per_season += 1
+        wins_for_team += 1
       end
     end
-    wins_per_season
+    wins_for_team
   end
 
   def most_goals_scored(team_id)
@@ -598,5 +598,34 @@ class StatTracker
     (total_goals_against_ss(game_team_array, team_id).to_f / game_team_array.length.to_f).round(2)
   end
 
+  def average_win_percentage(team_id)
+    games_for_team = @teams_hash[team_id]
+    sort = sort_game_team_pairs_by_attribute_and_select(:team_id, team_id)
+    total_games = sort[team_id].size
 
+    total_wins = wins_for_team(sort[team_id], team_id)
+    average_win = (total_wins.to_f/total_games)*100
+    average_win.round(2)
+  end
+
+  def sort_game_team_pairs_by_attribute_and_select(attr_sym, selection)
+    sort_game_teams = @game_teams.sort_by(&:game_id)
+
+    game_grouping = []
+    sort_game_teams.each_with_index do |game_team, index|
+      if sort_game_teams[index+1] != nil
+        if game_team.game_id == sort_game_teams[index+1].game_id
+          game_grouping << [game_team, sort_game_teams[index+1]]
+        end
+      end
+    end
+
+    hash = Hash.new { |hash, key| hash[key] = [] }
+    game_grouping.each do |game_pair|
+      if game_pair[0].send(attr_sym) == selection || game_pair[1].send(attr_sym) == selection
+        hash[selection] << game_pair
+      end
+    end
+    hash
+  end
 end

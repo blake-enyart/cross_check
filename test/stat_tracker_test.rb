@@ -254,6 +254,9 @@ class StatTrackerTest < Minitest::Test
     assert_equal 2.18, @stat_tracker.average_goals_against_ss(@stat_tracker.game_teams, "6")
   end
 
+  def test_average_win_percentage_returns_correctly
 
-
+    assert_equal 68.42, @stat_tracker.average_win_percentage("6")
+    assert_equal 27.27, @stat_tracker.average_win_percentage("3")
+  end
 end
