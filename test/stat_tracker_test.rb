@@ -203,6 +203,7 @@ class StatTrackerTest < Minitest::Test
     assert_equal 5, @stat_tracker.biggest_team_blowout("6")
   end
 
+<<<<<<< Updated upstream
   def test_it_can_compile_seasonal_summary
   expected = {
     "20122013" => {
@@ -316,4 +317,10 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Canucks", stat_tracker.biggest_surprise("20122013")
   end
 
+=======
+  def test_name_of_team_with_most_hits_returned
+
+    assert_equal "Red Wings", @stat_tracker.most_hits("Red Wings")
+  end
+>>>>>>> Stashed changes
 end

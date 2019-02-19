@@ -594,6 +594,7 @@ class StatTracker
     diff.min.abs
   end
 
+<<<<<<< Updated upstream
   def seasonal_summary(team_id)
     seasonal_summary_hash = {}
 
@@ -865,5 +866,26 @@ class StatTracker
 
     biggest_surprise = biggest_surprise.min_by { |team_id, win_percent| win_percent }[0]
     convert_team_id_and_team_name(biggest_surprise)
+=======
+  def most_hits(name)
+    game_ids_by_season = []
+    game_ids = []
+    #games_by_season
+    @games.each do |game|
+      game.game_id == game_id
+      game_ids << game
+      end
+    #end
+      binding.pry
+    # @games.each do |season, game_id|
+    #   if game.season == season
+    #     game_ids_by_season << season
+      # elsif
+      #   game_ids_by_season << game_id
+      #end
+    #end
+    #end
+      #if game.game_id
+>>>>>>> Stashed changes
   end
 end
