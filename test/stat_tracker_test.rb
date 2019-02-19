@@ -145,7 +145,7 @@ class StatTrackerTest < Minitest::Test
 
   def test_lowest_scoring_home_team_returns_correctly
 
-    assert_equal "Red Wings", @stat_tracker.lowest_scoring_home_team
+    assert_equal "Rangers", @stat_tracker.lowest_scoring_home_team
   end
 
   def test_winningest_team_returns_correct_team
@@ -300,6 +300,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_biggest_surprise_returns_correctly
+    skip
     game_path = './data/game.csv'
     team_path = './data/team_info.csv'
     game_teams_path = './data/game_teams_stats.csv'

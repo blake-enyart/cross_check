@@ -293,60 +293,74 @@ class StatTracker
     hash = {}
     teams_hash.each do |team_id, games_array|
       team_goals = 0
+      total_games = games_array.size
       games_array.each do |game|
         team_goals += game.goals.to_i
       end
-      hash[team_id] = team_goals
+      average_goals_per_game = (team_goals.to_f/total_games).round(2)
+      hash[team_id] = average_goals_per_game
     end
     hash
   end
 
   def highest_scoring_visitor
     sorted_away_games = group_by_team_id(@games_away)
-    sorted_with_scores = all_goals_per_team(sorted_away_games)
+    team_id_with_average_goals = all_goals_per_team(sorted_away_games)
 
-    best_team_id = sorted_with_scores.max_by { |team_id, team_goals| team_goals }[0]
+    best_team_id = team_id_with_average_goals.max_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(best_team_id)
   end
 
   def highest_scoring_home_team
     sorted_home_games = group_by_team_id(@games_home)
-    sorted_with_scores = all_goals_per_team(sorted_home_games)
+    team_id_with_average_goals = all_goals_per_team(sorted_home_games)
 
-    best_team_id = sorted_with_scores.max_by { |team_id, team_goals| team_goals }[0]
+    best_team_id = team_id_with_average_goals.max_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(best_team_id)
   end
 
   def lowest_scoring_visitor
     sorted_away_games = group_by_team_id(@games_away)
-    sorted_with_scores = all_goals_per_team(sorted_away_games)
+    team_id_with_average_goals = all_goals_per_team(sorted_away_games)
 
-    worst_team_id = sorted_with_scores.min_by { |team_id, team_goals| team_goals }[0]
+    worst_team_id = team_id_with_average_goals.min_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(worst_team_id)
   end
 
   def lowest_scoring_home_team
     sorted_home_games = group_by_team_id(@games_home)
-    sorted_with_scores = all_goals_per_team(sorted_home_games)
+    team_id_with_average_goals = all_goals_per_team(sorted_home_games)
 
-    worst_team_id = sorted_with_scores.min_by { |team_id, team_goals| team_goals }[0]
+    worst_team_id = team_id_with_average_goals.min_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(worst_team_id)
   end
 
   def winningest_team
     win_tracker = @teams_hash
-    win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
+    win_tracker = win_tracker.each { |team_id,team| win_tracker[team_id] = 0 }
 
-    game_grouping = @game_teams.group_by { |row| row.game_id }
-    game_grouping.each do |game_id, game_array|
-      outcome = win_determination(game_array)
-      if outcome
-        win_tracker[outcome[0]] += outcome[1]
-      end
+    game_grouping = @game_team_pairs
+
+    gp_by_team_id = game_pairs_by_attribute(game_grouping, :team_id)
+
+    gp_by_team_id.each do |team_id, game_pair_array|
+      total_games = game_pair_array.size
+      team_wins = wins_for_team(game_pair_array, team_id)
+      average = (team_wins.to_f/total_games).round(2)
+      win_tracker[team_id] = average
     end
 
-    best_team_id = win_tracker.max_by { |team_id, wins| wins }[0]
+    best_team_id = win_tracker.max_by { |team_id, win_percentage| win_percentage }[0]
     convert_team_id_and_team_name(best_team_id)
+  end
+
+  def game_pairs_by_attribute(game_grouping ,attr_sym)
+    gp_by_attr = Hash.new { |hash, key| hash[key] = [] }
+    game_grouping.each do |game_pair|
+      gp_by_attr[game_pair[0].send(attr_sym)] << game_pair
+      gp_by_attr[game_pair[1].send(attr_sym)] << game_pair
+    end
+    gp_by_attr
   end
 
   def win_determination(game_array)
@@ -848,7 +862,7 @@ class StatTracker
       pre_reg_decrease = win_percent - gp_by_team_id_regular[team_id]
       biggest_surprise[team_id] = pre_reg_decrease
     end
- 
+
     biggest_surprise = biggest_surprise.min_by { |team_id, win_percent| win_percent }[0]
     convert_team_id_and_team_name(biggest_surprise)
   end
