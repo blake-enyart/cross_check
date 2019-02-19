@@ -125,7 +125,7 @@ class StatTrackerTest < Minitest::Test
 
   def test_worst_offense_returns_correct_team
 
-    assert_equal 'Red Wings', @stat_tracker.worse_offense
+    assert_equal 'Red Wings', @stat_tracker.worst_offense
   end
 
   def test_highest_scoring_visitor_returns_correctly
@@ -320,7 +320,7 @@ class StatTrackerTest < Minitest::Test
   def test_it_can_calculate_head_to_head
     expected = {
       "Rangers" => 0.27,
-      "Red Wings" => 0.44
+      "Red Wings" => 0.38
     }
     assert_equal expected, @stat_tracker.head_to_head("6")
   end
