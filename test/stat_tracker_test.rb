@@ -63,12 +63,12 @@ class StatTrackerTest < Minitest::Test
 
   def test_percentage_home_wins_returns_correctly
 
-    assert_equal 63.16, @stat_tracker.percentage_home_wins
+    assert_equal 0.63, @stat_tracker.percentage_home_wins
   end
 
   def test_percentage_visitor_wins_returns_correctly
 
-    assert_equal 40.0, @stat_tracker.percentage_visitor_wins
+    assert_equal 0.40, @stat_tracker.percentage_visitor_wins
   end
 
   def test_count_of_games_by_season_returns_correct_hash
@@ -203,7 +203,6 @@ class StatTrackerTest < Minitest::Test
     assert_equal 5, @stat_tracker.biggest_team_blowout("6")
   end
 
-<<<<<<< Updated upstream
   def test_it_can_compile_seasonal_summary
   expected = {
     "20122013" => {
