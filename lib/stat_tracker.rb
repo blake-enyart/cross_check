@@ -614,6 +614,54 @@ class StatTracker
     diff.min.abs
   end
 
+  # def seasonal_summary(team_id)
+  #   seasonal_summary_hash = {}
+  #
+  #   game_teams_by_team_id = @game_teams.find_all do |game_team|
+  #     game_team.team_id == team_id
+  #   end
+  #
+  #   game_teams_by_season_hash = game_teams_by_team_id.group_by do |game_team|
+  #     game_team.season
+  #   end
+  #
+  #   pre_reg_season_hash = {}
+  #   game_team_season_type_hash = {}
+  #   game_teams_by_season_hash.each do |season, game_teams|
+  #     preseason_game_teams = game_teams.find_all do |game_team|
+  #       #example: game_id "2012030223" "2012" = season; "03" = preseason/playoff id, "0223" = game identifier(not important)
+  #       #of "01" preseason id, "1" is [5] index; "02" = regular season id; "03" playoff/postseason id, "3"
+  #       game_team.game_id[5] == "1"
+  #     end
+  #     regular_season_game_teams = game_teams.find_all do |game_team|
+  #       game_team.game_id[5] == "2"
+  #     end
+  #     pre_reg_season_hash[:preseason] = preseason_game_teams
+  #     pre_reg_season_hash[:regular_season] = regular_season_game_teams
+  #
+  #     game_team_season_type_hash[season] = {}
+  #
+  #     preseason_season_holder_hash = {}
+  #     preseason_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(preseason_game_teams)
+  #     preseason_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(preseason_game_teams)
+  #     preseason_season_holder_hash[:total_goals_against] = total_goals_against_ss(preseason_game_teams, team_id)
+  #     preseason_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(preseason_game_teams)
+  #     preseason_season_holder_hash[:average_goals_against] = average_goals_against_ss(preseason_game_teams, team_id)
+  #     game_team_season_type_hash[season][:preseason] = preseason_season_holder_hash
+  #
+  #     regular_season_holder_hash = {}
+  #     regular_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(regular_season_game_teams)
+  #     regular_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(regular_season_game_teams)
+  #     regular_season_holder_hash[:total_goals_against] = total_goals_against_ss(regular_season_game_teams, team_id)
+  #     regular_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(regular_season_game_teams)
+  #     regular_season_holder_hash[:average_goals_against] = average_goals_against_ss(regular_season_game_teams, team_id)
+  #     game_team_season_type_hash[season][:regular_season] = regular_season_holder_hash
+  #   end
+  #   game_team_season_type_hash
+  #
+  #   # seasonal_summary_hash
+  # end
+
   def seasonal_summary(team_id)
     seasonal_summary_hash = {}
 
@@ -630,8 +678,8 @@ class StatTracker
     game_teams_by_season_hash.each do |season, game_teams|
       preseason_game_teams = game_teams.find_all do |game_team|
         #example: game_id "2012030223" "2012" = season; "03" = preseason/playoff id, "0223" = game identifier(not important)
-        #of "03" preseason id, "3" is [5] index; "02" = regular season id
-        game_team.game_id[5] == "3"
+        #of "01" preseason id, "1" is [5] index; "02" = regular season id; "03" playoff/postseason id, "3"
+        game_team.game_id[5] == "1"
       end
       regular_season_game_teams = game_teams.find_all do |game_team|
         game_team.game_id[5] == "2"
@@ -660,12 +708,17 @@ class StatTracker
     game_team_season_type_hash
   end
 
+
   def win_percentage_seasonal_summary(game_team_array)
     total_games = game_team_array.length
     total_wins = game_team_array.count do |game_team|
       game_team.won == "TRUE"
     end
-    (total_wins.to_f / total_games.to_f).round(2)
+    if total_games == 0
+      return 0.to_f
+    else
+      (total_wins.to_f / total_games.to_f).round(2)
+    end
   end
 
   def total_goals_scored_ss(game_team_array)
@@ -675,7 +728,11 @@ class StatTracker
   end
 
   def average_goals_scored_ss(game_team_array)
-    (total_goals_scored_ss(game_team_array).to_f / game_team_array.length.to_f).round(2)
+    if game_team_array.length == 0
+      return 0.to_f
+    else
+      (total_goals_scored_ss(game_team_array).to_f / game_team_array.length.to_f).round(2)
+    end
   end
 
   def total_goals_against_ss(game_team_array, team_id)
@@ -695,7 +752,11 @@ class StatTracker
   end
 
   def average_goals_against_ss(game_team_array, team_id)
-    (total_goals_against_ss(game_team_array, team_id).to_f / game_team_array.length.to_f).round(2)
+    if game_team_array.length == 0
+      return 0.to_f
+    else
+      (total_goals_against_ss(game_team_array, team_id).to_f / game_team_array.length.to_f).round(2)
+    end
   end
 
   def average_win_percentage(team_id)
