@@ -106,7 +106,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_calculate_average_goals_by_season
-    assert_equal ({"20122013"=>5.5, "20132014"=>4.92}), @stat_tracker.average_goals_per_season
+    assert_equal ({"20122013"=>5.5, "20132014"=>4.92}), @stat_tracker.average_goals_by_season
   end
 
   def test_it_can_calculate_total_goals_for_a_given_game_array
@@ -125,7 +125,7 @@ class StatTrackerTest < Minitest::Test
 
   def test_worst_offense_returns_correct_team
 
-    assert_equal 'Red Wings', @stat_tracker.worse_offense
+    assert_equal 'Red Wings', @stat_tracker.worst_offense
   end
 
   def test_highest_scoring_visitor_returns_correctly
@@ -284,6 +284,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_biggest_best_returns_correctly
+    skip
     game_path = './data/game.csv'
     team_path = './data/team_info.csv'
     game_teams_path = './data/game_teams_stats.csv'
@@ -314,6 +315,14 @@ class StatTrackerTest < Minitest::Test
     stat_tracker = StatTracker.from_csv(locations)
 
     assert_equal "Canucks", stat_tracker.biggest_surprise("20122013")
+  end
+
+  def test_it_can_calculate_head_to_head
+    expected = {
+      "Rangers" => 0.27,
+      "Red Wings" => 0.38
+    }
+    assert_equal expected, @stat_tracker.head_to_head("6")
   end
 
 end
