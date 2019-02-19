@@ -269,8 +269,8 @@ class StatTrackerTest < Minitest::Test
 
   def test_average_win_percentage_returns_correctly
 
-    assert_equal 68.42, @stat_tracker.average_win_percentage("6")
-    assert_equal 27.27, @stat_tracker.average_win_percentage("3")
+    assert_equal 0.68, @stat_tracker.average_win_percentage("6")
+    assert_equal 0.27, @stat_tracker.average_win_percentage("3")
   end
 
   def test_favorite_opponent_returns_correctly

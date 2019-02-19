@@ -760,8 +760,7 @@ class StatTracker
     total_games = sort[team_id].size
 
     total_wins = wins_for_team(sort[team_id], team_id)
-    average_win = (total_wins.to_f/total_games)*100
-    average_win.round(2)
+    average_win = (total_wins.to_f/total_games).round(2)
   end
 
   def sort_game_team_pairs_by_attribute_and_select(attr_sym, selection)
