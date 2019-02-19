@@ -347,8 +347,8 @@ class StatTracker
 #     best_team_id = win_tracker.max_by { |team_id, wins| wins }[0]
 #     convert_team_id_and_team_name(best_team_id)
 #   end
- ######erin-end  
-    
+ ######erin-end
+
 #     win_tracker = group_by_team_id(@game_teams)
 #     win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
 #     game_grouping = @game_teams.group_by { |row| row.game_id }
@@ -357,7 +357,7 @@ class StatTracker
 #       if outcome
 #         win_tracker[outcome[0]] += outcome[1]
 #       end
-  
+
     win_tracker = @teams_hash
     win_tracker = win_tracker.each { |team_id,team| win_tracker[team_id] = 0 }
 
@@ -969,7 +969,7 @@ class StatTracker
     opposing_team_by_won.each do |team_id, opposing_team_info|
       total_games = opposing_team_info.length
       total_wins = opposing_team_info.count do |info|
-        info[1] == "TRUE"
+        info[1] == "FALSE"
       end
       total_wins_and_games_hash[team_id] = (total_wins.to_f / total_games.to_f).round(2)
     end
