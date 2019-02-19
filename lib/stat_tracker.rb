@@ -879,33 +879,4 @@ class StatTracker
     final_hash
   end
 
-  # def win_percentage_seasonal_summary(game_team_array)
-  #   total_games = game_team_array.length
-  #   total_wins = game_team_array.count do |game_team|
-  #     game_team.won == "TRUE"
-  #   end
-  #   (total_wins.to_f / total_games.to_f).round(2)
-  # end
-
-  # def convert_team_id_and_team_name(team)
-  #   name = nil
-  #   @teams.each do |row|
-  #     if team == row.team_id
-  #       name = row.team_name
-  #     elsif team == row.team_name
-  #       name = row.team_id
-  #     end
-  #   end
-  #   name
-  # end
-
-  # def average_win_percentage(team_id)
-  #   sort = sort_game_team_pairs_by_attribute_and_select(:team_id, team_id)
-  #   total_games = sort[team_id].size
-  #
-  #   total_wins = wins_for_team(sort[team_id], team_id)
-  #   average_win = (total_wins.to_f/total_games)*100
-  #   average_win.round(2)
-  # end
-
 end
