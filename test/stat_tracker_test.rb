@@ -204,6 +204,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_compile_seasonal_summary
+
   expected = {
     "20122013" => {
       :preseason => {
@@ -239,7 +240,7 @@ class StatTrackerTest < Minitest::Test
       }
     }
 
-    assert_equal expected, @stat_tracker.seasonal_summary("6")
+    assert_equal expected, stat_tracker.seasonal_summary("18")
   end
 
   def test_win_percentage_seasonal_summary
