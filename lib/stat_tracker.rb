@@ -596,8 +596,8 @@ class StatTracker
     game_teams_by_season_hash.each do |season, game_teams|
       preseason_game_teams = game_teams.find_all do |game_team|
         #example: game_id "2012030223" "2012" = season; "03" = preseason/playoff id, "0223" = game identifier(not important)
-        #of "03" preseason id, "3" is [5] index; "02" = regular season id
-        game_team.game_id[5] == "3"
+        #of "01" preseason id, "1" is [5] index; "02" = regular season id; "03" playoff/postseason id, "3"
+        game_team.game_id[5] == "1"
       end
       regular_season_game_teams = game_teams.find_all do |game_team|
         game_team.game_id[5] == "2"
@@ -633,7 +633,11 @@ class StatTracker
     total_wins = game_team_array.count do |game_team|
       game_team.won == "TRUE"
     end
-    (total_wins.to_f / total_games.to_f).round(2)
+    if total_games == 0
+      return 0.to_f
+    else
+      (total_wins.to_f / total_games.to_f).round(2)
+    end
   end
 
   def total_goals_scored_ss(game_team_array)
@@ -643,7 +647,11 @@ class StatTracker
   end
 
   def average_goals_scored_ss(game_team_array)
-    (total_goals_scored_ss(game_team_array).to_f / game_team_array.length.to_f).round(2)
+    if game_team_array.length == 0
+      return 0.to_f
+    else
+      (total_goals_scored_ss(game_team_array).to_f / game_team_array.length.to_f).round(2)
+    end
   end
 
   def total_goals_against_ss(game_team_array, team_id)
@@ -663,7 +671,11 @@ class StatTracker
   end
 
   def average_goals_against_ss(game_team_array, team_id)
-    (total_goals_against_ss(game_team_array, team_id).to_f / game_team_array.length.to_f).round(2)
+    if game_team_array.length == 0
+      return 0.to_f
+    else
+      (total_goals_against_ss(game_team_array, team_id).to_f / game_team_array.length.to_f).round(2)
+    end
   end
 
   def average_win_percentage(team_id)
@@ -848,7 +860,7 @@ class StatTracker
       pre_reg_decrease = win_percent - gp_by_team_id_regular[team_id]
       biggest_surprise[team_id] = pre_reg_decrease
     end
- 
+
     biggest_surprise = biggest_surprise.min_by { |team_id, win_percent| win_percent }[0]
     convert_team_id_and_team_name(biggest_surprise)
   end

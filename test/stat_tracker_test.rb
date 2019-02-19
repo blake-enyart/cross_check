@@ -207,11 +207,11 @@ class StatTrackerTest < Minitest::Test
   expected = {
     "20122013" => {
       :preseason => {
-        :win_percentage=>0.80,
-        :total_goals_scored=>16,
-        :total_goals_against=>10,
-        :average_goals_scored=>3.2,
-        :average_goals_against=>2.0
+        :win_percentage=>0.0,
+        :total_goals_scored=>0,
+        :total_goals_against=>0,
+        :average_goals_scored=>0.0,
+        :average_goals_against=>0.0
       },
       :regular_season => {
         :win_percentage=>0.33,
@@ -223,11 +223,11 @@ class StatTrackerTest < Minitest::Test
       },
       "20132014" => {
         :preseason => {
-          :win_percentage=>0.80,
-          :total_goals_scored=>14,
-          :total_goals_against=>6,
-          :average_goals_scored=>2.8,
-          :average_goals_against=>1.2
+          :win_percentage=>0.0,
+          :total_goals_scored=>0,
+          :total_goals_against=>0,
+          :average_goals_scored=>0.0,
+          :average_goals_against=>0.0
         },
         :regular_season => {
           :win_percentage=>0.67,
