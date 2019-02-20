@@ -155,15 +155,11 @@ class StatTrackerTest < Minitest::Test
 
   #Iteration 4 test
   def test_team_info_returns_attributes_in_hash
-    expected = {:@team_id=>"6", :@franchise_id=>"6", :@short_name=>"Boston", :@team_name=>"Bruins", :@abbreviation=>"BOS", :@link=>"/api/v1/teams/6"}
+    expected = {"team_id"=>"6", "franchise_id"=>"6", "short_name"=>"Boston", "team_name"=>"Bruins", "abbreviation"=>"BOS", "link"=>"/api/v1/teams/6"}
+
 
     assert_equal expected, @stat_tracker.team_info("6")
   end
-
-  # def test_best_season_returns_correctly
-  #
-  #   assert_equal "20122013", @stat_tracker.best_season("3")
-  # end
 
   def test_worst_season_returns_correctly
 
@@ -185,16 +181,11 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Red Wings", @stat_tracker.best_defense
   end
 
-  # def test_it_returns_worst_defense
-  #
-  #   assert_equal "Bruins", @stat_tracker.worst_defense
-  # end
 
   def test_it_returns_worst_loss
 
     assert_equal 5, @stat_tracker.worst_loss("17")
     assert_equal 3, @stat_tracker.worst_loss("6")
-
   end
 
   def test_it_returns_biggest_blowout
@@ -240,7 +231,7 @@ class StatTrackerTest < Minitest::Test
       }
     }
 
-    assert_equal expected, stat_tracker.seasonal_summary("18")
+    assert_equal expected, @stat_tracker.seasonal_summary("6")
   end
 
   def test_win_percentage_seasonal_summary
@@ -320,7 +311,24 @@ class StatTrackerTest < Minitest::Test
 
   def test_name_of_team_with_most_hits_returned
 
-    assert_equal "Red Wings", @stat_tracker.most_hits("Red Wings")
+    assert_equal "Rangers", @stat_tracker.most_hits("20122013")
+  end
+
+  def test_name_of_team_with_most_hits_returned_large_data
+    skip
+    game_path = './data/game.csv'
+    team_path = './data/team_info.csv'
+    game_teams_path = './data/game_teams_stats.csv'
+
+    locations = {
+      games: game_path,
+      teams: team_path,
+      game_teams: game_teams_path
+    }
+
+    stat_tracker = StatTracker.from_csv(locations)
+
+    assert_equal "Islanders", stat_tracker.most_hits("20142015")
   end
 
   def test_it_can_calculate_head_to_head
