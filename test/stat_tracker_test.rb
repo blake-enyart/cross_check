@@ -63,12 +63,12 @@ class StatTrackerTest < Minitest::Test
 
   def test_percentage_home_wins_returns_correctly
 
-    assert_equal 63.16, @stat_tracker.percentage_home_wins
+    assert_equal 0.63, @stat_tracker.percentage_home_wins
   end
 
   def test_percentage_visitor_wins_returns_correctly
 
-    assert_equal 40.0, @stat_tracker.percentage_visitor_wins
+    assert_equal 0.40, @stat_tracker.percentage_visitor_wins
   end
 
   def test_count_of_games_by_season_returns_correct_hash
@@ -270,8 +270,8 @@ class StatTrackerTest < Minitest::Test
 
   def test_average_win_percentage_returns_correctly
 
-    assert_equal 68.42, @stat_tracker.average_win_percentage("6")
-    assert_equal 27.27, @stat_tracker.average_win_percentage("3")
+    assert_equal 0.68, @stat_tracker.average_win_percentage("6")
+    assert_equal 0.27, @stat_tracker.average_win_percentage("3")
   end
 
   def test_favorite_opponent_returns_correctly
@@ -318,6 +318,11 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Canucks", stat_tracker.biggest_surprise("20122013")
   end
 
+  def test_name_of_team_with_most_hits_returned
+
+    assert_equal "Red Wings", @stat_tracker.most_hits("Red Wings")
+  end
+
   def test_it_can_calculate_head_to_head
     expected = {
       "Rangers" => 0.73,
@@ -325,5 +330,4 @@ class StatTrackerTest < Minitest::Test
     }
     assert_equal expected, @stat_tracker.head_to_head("6")
   end
-
 end
