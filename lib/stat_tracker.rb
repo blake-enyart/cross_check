@@ -1,8 +1,10 @@
 require_relative './class_helper'
 require_relative './season_stats'
+require_relative './team_stats'
 
 class StatTracker
   include SeasonStats
+  include TeamStats
 
   attr_reader :games,
               :teams,
@@ -757,7 +759,6 @@ class StatTracker
     favorite_opponent = game_pairs_hash.max_by { |team_id_opponent, win_percentage| win_percentage }[0]
     convert_team_id_and_team_name(favorite_opponent)
   end
-
 
   def head_to_head(team_id) #TeamStats
     games_played_by_team = @game_teams.find_all do |game_team|
