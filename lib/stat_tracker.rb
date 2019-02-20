@@ -19,7 +19,8 @@ class StatTracker
     separate_games = separate_home_and_away_games(game_teams_data)
     @games_home = separate_games[0]
     @games_away = separate_games[1]
-    # @teams_hash = group_by_team_id(game_teams_data)
+    @teams_hash = group_by_team_id(game_teams_data)
+
     diff_seasons = separate_pre_and_regular_season_games(games_data)
     @preseason_games = diff_seasons[0]
     @regular_games = diff_seasons[1]
@@ -161,7 +162,8 @@ class StatTracker
     @games_home.each do |home_game|
       number_of_wins += 1 if home_game.won == "TRUE"
     end
-    percent_wins = (number_of_wins/number_of_games).round(2)
+
+    (number_of_wins/number_of_games).round(2)
   end
 
   def percentage_visitor_wins
@@ -170,7 +172,8 @@ class StatTracker
     @games_away.each do |away_game|
       number_of_wins += 1 if away_game.won == "TRUE"
     end
-    percent_wins = (number_of_wins/number_of_games).round(2)
+
+    (number_of_wins/number_of_games).round(2)
   end
 
   def count_of_games_by_season
@@ -329,33 +332,9 @@ class StatTracker
   end
 
   def winningest_team
-#####erin-start
-#     win_tracker = group_by_team_id(@game_teams)
-#     win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
-#     game_grouping = @game_teams.group_by { |row| row.game_id }
-#     game_grouping.each do |game_id, game_array|
-#       outcome = win_determination(game_array)
-#       if outcome
-#         win_tracker[outcome[0]] += outcome[1]
-#       end
-#     end
+    win_tracker = {}
 
-#     best_team_id = win_tracker.max_by { |team_id, wins| wins }[0]
-#     convert_team_id_and_team_name(best_team_id)
-#   end
- ######erin-end
-
-#     win_tracker = group_by_team_id(@game_teams)
-#     win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
-#     game_grouping = @game_teams.group_by { |row| row.game_id }
-#     game_grouping.each do |game_id, game_array|
-#       outcome = win_determination(game_array)
-#       if outcome
-#         win_tracker[outcome[0]] += outcome[1]
-#       end
-
-    win_tracker = @teams_hash
-    win_tracker = win_tracker.each { |team_id,team| win_tracker[team_id] = 0 }
+    @teams_hash.each { |team_id, team_object| win_tracker[team_id] = 0 }
 
     game_grouping = @game_team_pairs
 
@@ -371,7 +350,7 @@ class StatTracker
     best_team_id = win_tracker.max_by { |team_id, win_percentage| win_percentage }[0]
     convert_team_id_and_team_name(best_team_id)
   end
-#####
+
   def game_pairs_by_attribute(game_grouping ,attr_sym)
     gp_by_attr = Hash.new { |hash, key| hash[key] = [] }
     game_grouping.each do |game_pair|
@@ -563,7 +542,7 @@ class StatTracker
     @teams.each do |team|
       if team.team_id == team_id
         team.instance_variables.each do |variable|
-          hash[variable] = team.instance_variable_get(variable)
+          hash[variable.to_s[1..-1]] = team.instance_variable_get(variable)
         end
       end
     end
@@ -611,7 +590,6 @@ class StatTracker
   end
 
   def seasonal_summary(team_id)
-    seasonal_summary_hash = {}
     game_teams_by_team_id = @game_teams.find_all do |game_team|
       game_team.team_id == team_id
     end
@@ -706,7 +684,7 @@ class StatTracker
     total_games = sort[team_id].size
 
     total_wins = wins_for_team(sort[team_id], team_id)
-    average_win = (total_wins.to_f/total_games).round(2)
+    (total_wins.to_f/total_games).round(2)
   end
 
   def sort_game_team_pairs_by_attribute_and_select(attr_sym, selection)
@@ -769,13 +747,12 @@ class StatTracker
 
     game_pairs_hash.each do |team_id_opponent, game_pair_array|
       total_games = game_pair_array.size
-      total_wins = wins_for_team(game_pair_array, team_id)
+      total_wins = wins_for_team(game_pair_array, team_id_opponent)
       average_win = (total_wins.to_f/total_games)*100
       average_win = average_win.round(2)
       game_pairs_hash[team_id_opponent] = average_win
     end
-
-    favorite_opponent = game_pairs_hash.min_by { |team_id_opponent, win_percentage| win_percentage }[0]
+    favorite_opponent = game_pairs_hash.max_by { |team_id_opponent, win_percentage| win_percentage }[0]
     convert_team_id_and_team_name(favorite_opponent)
   end
 
@@ -925,10 +902,41 @@ class StatTracker
     gt_hash = @game_teams.group_by do |game_team|
       game_team.season
     end
-    key = gt_hash[season].max_by do |game_team|
-      game_team.hits
+
+    team_agg = Hash.new { |hash, key| hash[key] = [] }
+
+    team_hits_array_hash = gt_hash[season].inject(team_agg) do |hash, game_team|
+      hash[game_team.team_id] << game_team.hits
+      hash
     end
-      team = key.team_id
-      convert_team_id_and_team_name(team)
+
+    team_hits_array_hash.each do |team_id, hits_array|
+      team_hits_array_hash[team_id] = hits_array.sum
+    end
+
+    most_hits = team_hits_array_hash.max_by { |team_id, hits_tally| hits_tally }[0]
+
+    convert_team_id_and_team_name(most_hits)
+  end
+
+  def least_hits(season)
+    gt_hash = @game_teams.group_by do |game_team|
+      game_team.season
+    end
+
+    team_agg = Hash.new { |hash, key| hash[key] = [] }
+
+    team_hits_array_hash = gt_hash[season].inject(team_agg) do |hash, game_team|
+      hash[game_team.team_id] << game_team.hits
+      hash
+    end
+
+    team_hits_array_hash.each do |team_id, hits_array|
+      team_hits_array_hash[team_id] = hits_array.sum
+    end
+
+    least_hits = team_hits_array_hash.min_by { |team_id, hits_tally| hits_tally }[0]
+
+    convert_team_id_and_team_name(least_hits)
   end
 end
