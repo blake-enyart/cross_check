@@ -590,7 +590,6 @@ class StatTracker
   end
 
   def seasonal_summary(team_id)
-    seasonal_summary_hash = {}
     game_teams_by_team_id = @game_teams.find_all do |game_team|
       game_team.team_id == team_id
     end
@@ -685,7 +684,7 @@ class StatTracker
     total_games = sort[team_id].size
 
     total_wins = wins_for_team(sort[team_id], team_id)
-    average_win = (total_wins.to_f/total_games).round(2)
+    (total_wins.to_f/total_games).round(2)
   end
 
   def sort_game_team_pairs_by_attribute_and_select(attr_sym, selection)
@@ -748,13 +747,12 @@ class StatTracker
 
     game_pairs_hash.each do |team_id_opponent, game_pair_array|
       total_games = game_pair_array.size
-      total_wins = wins_for_team(game_pair_array, team_id)
+      total_wins = wins_for_team(game_pair_array, team_id_opponent)
       average_win = (total_wins.to_f/total_games)*100
       average_win = average_win.round(2)
       game_pairs_hash[team_id_opponent] = average_win
     end
-
-    favorite_opponent = game_pairs_hash.min_by { |team_id_opponent, win_percentage| win_percentage }[0]
+    favorite_opponent = game_pairs_hash.max_by { |team_id_opponent, win_percentage| win_percentage }[0]
     convert_team_id_and_team_name(favorite_opponent)
   end
 
@@ -928,9 +926,9 @@ class StatTracker
 
     team_agg = Hash.new { |hash, key| hash[key] = [] }
 
-    team_hits_array_hash = gt_hash[season].inject(team_agg) do |team_agg, game_team|
-      team_agg[game_team.team_id] << game_team.hits
-      team_agg
+    team_hits_array_hash = gt_hash[season].inject(team_agg) do |hash, game_team|
+      hash[game_team.team_id] << game_team.hits
+      hash
     end
 
     team_hits_array_hash.each do |team_id, hits_array|
