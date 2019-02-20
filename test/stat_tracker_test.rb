@@ -148,9 +148,20 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Rangers", @stat_tracker.lowest_scoring_home_team
   end
 
-  def test_winningest_team_returns_correct_team
-    skip
-    assert_equal "Bruins", @stat_tracker.winningest_team
+  def test_winningest_team_returns_correct_team_large_data
+    game_path = './data/game.csv'
+    team_path = './data/team_info.csv'
+    game_teams_path = './data/game_teams_stats.csv'
+
+    locations = {
+      games: game_path,
+      teams: team_path,
+      game_teams: game_teams_path
+    }
+
+    stat_tracker = StatTracker.from_csv(locations)
+
+    assert_equal "Golden Knights", stat_tracker.winningest_team
   end
 
   #Iteration 4 test
