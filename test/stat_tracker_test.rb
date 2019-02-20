@@ -337,10 +337,10 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Canucks", stat_tracker.biggest_surprise("20122013")
   end
 
-  def test_name_of_team_with_most_hits_returned
-
-    assert_equal "Rangers", @stat_tracker.most_hits("20122013")
-  end
+  # def test_name_of_team_with_most_hits_returned
+  #
+  #   assert_equal "Rangers", @stat_tracker.most_hits("20122013")
+  # end
 
   def test_name_of_team_with_least_hits_returned
 
