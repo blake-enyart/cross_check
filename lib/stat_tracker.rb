@@ -610,100 +610,46 @@ class StatTracker
     diff.min.abs
   end
 
-  # def seasonal_summary(team_id)
-  #   seasonal_summary_hash = {}
-  #
-  #   game_teams_by_team_id = @game_teams.find_all do |game_team|
-  #     game_team.team_id == team_id
-  #   end
-  #
-  #   game_teams_by_season_hash = game_teams_by_team_id.group_by do |game_team|
-  #     game_team.season
-  #   end
-  #
-  #   pre_reg_season_hash = {}
-  #   game_team_season_type_hash = {}
-  #   game_teams_by_season_hash.each do |season, game_teams|
-  #     preseason_game_teams = game_teams.find_all do |game_team|
-  #       #example: game_id "2012030223" "2012" = season; "03" = preseason/playoff id, "0223" = game identifier(not important)
-  #       #of "01" preseason id, "1" is [5] index; "02" = regular season id; "03" playoff/postseason id, "3"
-  #       game_team.game_id[5] == "1"
-  #     end
-  #     regular_season_game_teams = game_teams.find_all do |game_team|
-  #       game_team.game_id[5] == "2"
-  #     end
-  #     pre_reg_season_hash[:preseason] = preseason_game_teams
-  #     pre_reg_season_hash[:regular_season] = regular_season_game_teams
-  #
-  #     game_team_season_type_hash[season] = {}
-  #
-  #     preseason_season_holder_hash = {}
-  #     preseason_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(preseason_game_teams)
-  #     preseason_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(preseason_game_teams)
-  #     preseason_season_holder_hash[:total_goals_against] = total_goals_against_ss(preseason_game_teams, team_id)
-  #     preseason_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(preseason_game_teams)
-  #     preseason_season_holder_hash[:average_goals_against] = average_goals_against_ss(preseason_game_teams, team_id)
-  #     game_team_season_type_hash[season][:preseason] = preseason_season_holder_hash
-  #
-  #     regular_season_holder_hash = {}
-  #     regular_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(regular_season_game_teams)
-  #     regular_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(regular_season_game_teams)
-  #     regular_season_holder_hash[:total_goals_against] = total_goals_against_ss(regular_season_game_teams, team_id)
-  #     regular_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(regular_season_game_teams)
-  #     regular_season_holder_hash[:average_goals_against] = average_goals_against_ss(regular_season_game_teams, team_id)
-  #     game_team_season_type_hash[season][:regular_season] = regular_season_holder_hash
-  #   end
-  #   game_team_season_type_hash
-  #
-  #   # seasonal_summary_hash
-  # end
-  #
-  # def seasonal_summary(team_id)
-  #   seasonal_summary_hash = {}
-  #
-  #   game_teams_by_team_id = @game_teams.find_all do |game_team|
-  #     game_team.team_id == team_id
-  #   end
-  #
-  #   game_teams_by_season_hash = game_teams_by_team_id.group_by do |game_team|
-  #     game_team.season
-  #   end
-  #
-  #   pre_reg_season_hash = {}
-  #   game_team_season_type_hash = {}
-  #   game_teams_by_season_hash.each do |season, game_teams|
-  #     preseason_game_teams = game_teams.find_all do |game_team|
-  #       #example: game_id "2012030223" "2012" = season; "03" = preseason/playoff id, "0223" = game identifier(not important)
-  #       #of "01" preseason id, "1" is [5] index; "02" = regular season id; "03" playoff/postseason id, "3"
-  #       game_team.game_id[5] == "1"
-  #     end
-  #     regular_season_game_teams = game_teams.find_all do |game_team|
-  #       game_team.game_id[5] == "2"
-  #     end
-  #     pre_reg_season_hash[:preseason] = preseason_game_teams
-  #     pre_reg_season_hash[:regular_season] = regular_season_game_teams
-  #
-  #     game_team_season_type_hash[season] = {}
-  #
-  #     preseason_season_holder_hash = {}
-  #     preseason_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(preseason_game_teams)
-  #     preseason_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(preseason_game_teams)
-  #     preseason_season_holder_hash[:total_goals_against] = total_goals_against_ss(preseason_game_teams, team_id)
-  #     preseason_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(preseason_game_teams)
-  #     preseason_season_holder_hash[:average_goals_against] = average_goals_against_ss(preseason_game_teams, team_id)
-  #     game_team_season_type_hash[season][:preseason] = preseason_season_holder_hash
-  #
-  #     regular_season_holder_hash = {}
-  #     regular_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(regular_season_game_teams)
-  #     regular_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(regular_season_game_teams)
-  #     regular_season_holder_hash[:total_goals_against] = total_goals_against_ss(regular_season_game_teams, team_id)
-  #     regular_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(regular_season_game_teams)
-  #     regular_season_holder_hash[:average_goals_against] = average_goals_against_ss(regular_season_game_teams, team_id)
-  #     game_team_season_type_hash[season][:regular_season] = regular_season_holder_hash
-  #   end
-  #   game_team_season_type_hash
-  # end
+  def seasonal_summary(team_id)
+    seasonal_summary_hash = {}
+    game_teams_by_team_id = @game_teams.find_all do |game_team|
+      game_team.team_id == team_id
+    end
+    game_teams_by_season_hash = game_teams_by_team_id.group_by do |game_team|
+      game_team.season
+    end
+    pre_reg_season_hash = {}
+    game_team_season_type_hash = {}
+    game_teams_by_season_hash.each do |season, game_teams|
+      preseason_game_teams = game_teams.find_all do |game_team|
+        #example: game_id "2012030223" "2012" = season; "03" = preseason/playoff id, "0223" = game identifier(not important)
+        #of "01" preseason id, "1" is [5] index; "02" = regular season id; "03" playoff/postseason id, "3"
+        game_team.game_id[5] == "1"
+      end
+      regular_season_game_teams = game_teams.find_all do |game_team|
+        game_team.game_id[5] == "2"
+      end
+      pre_reg_season_hash[:preseason] = preseason_game_teams
+      pre_reg_season_hash[:regular_season] = regular_season_game_teams
+      game_team_season_type_hash[season] = {}
+      preseason_season_holder_hash = {}
+      preseason_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(preseason_game_teams)
+      preseason_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(preseason_game_teams)
+      preseason_season_holder_hash[:total_goals_against] = total_goals_against_ss(preseason_game_teams, team_id)
+      preseason_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(preseason_game_teams)
+      preseason_season_holder_hash[:average_goals_against] = average_goals_against_ss(preseason_game_teams, team_id)
+      game_team_season_type_hash[season][:preseason] = preseason_season_holder_hash
 
+      regular_season_holder_hash = {}
+      regular_season_holder_hash[:win_percentage] = win_percentage_seasonal_summary(regular_season_game_teams)
+      regular_season_holder_hash[:total_goals_scored] = total_goals_scored_ss(regular_season_game_teams)
+      regular_season_holder_hash[:total_goals_against] = total_goals_against_ss(regular_season_game_teams, team_id)
+      regular_season_holder_hash[:average_goals_scored] = average_goals_scored_ss(regular_season_game_teams)
+      regular_season_holder_hash[:average_goals_against] = average_goals_against_ss(regular_season_game_teams, team_id)
+      game_team_season_type_hash[season][:regular_season] = regular_season_holder_hash
+    end
+    game_team_season_type_hash
+  end
 
   def win_percentage_seasonal_summary(game_team_array)
     total_games = game_team_array.length
@@ -941,6 +887,40 @@ class StatTracker
     convert_team_id_and_team_name(biggest_surprise)
   end
 
+  def head_to_head(team_id)
+    games_played_by_team = @game_teams.find_all do |game_team|
+      game_team.team_id == team_id
+    end
+    opposing_team_id_info = []
+    games_played_by_team.each do |team_id_game_team|
+      game_team_pairs = @game_teams.find_all do |game_team|
+        game_team.game_id == team_id_game_team.game_id
+      end
+      game_team_pairs.each do |one_game_team|
+        if one_game_team.team_id != team_id
+          opposing_team_id_info << [one_game_team.team_id, one_game_team.won]
+        end
+      end
+    end
+    opposing_team_by_won = opposing_team_id_info.group_by do |opposing_team_info|
+      opposing_team_info[0]
+    end
+    total_wins = 0
+    total_wins_and_games_hash = {}
+    opposing_team_by_won.each do |team_id, opposing_team_info|
+      total_games = opposing_team_info.length
+      total_wins = opposing_team_info.count do |info|
+        info[1] == "FALSE"
+      end
+      total_wins_and_games_hash[team_id] = (total_wins.to_f / total_games.to_f).round(2)
+    end
+    final_hash = {}
+    total_wins_and_games_hash.each do |team_id, win_percentage|
+      final_hash[convert_team_id_and_team_name(team_id)] = win_percentage
+    end
+    final_hash
+  end
+
   # def most_hits(name)
   #   game_ids = []
   #   games_by_season
@@ -963,38 +943,3 @@ class StatTracker
   #     convert_team_id_and_team_name(team)
   # end
 end
-
-  # def head_to_head(team_id)
-  #   games_played_by_team = @game_teams.find_all do |game_team|
-  #     game_team.team_id == team_id
-  #   end
-  #   opposing_team_id_info = []
-  #   games_played_by_team.each do |team_id_game_team|
-  #     game_team_pairs = @game_teams.find_all do |game_team|
-  #       game_team.game_id == team_id_game_team.game_id
-  #     end
-  #     game_team_pairs.each do |one_game_team|
-  #       if one_game_team.team_id != team_id
-  #         opposing_team_id_info << [one_game_team.team_id, one_game_team.won]
-  #       end
-  #     end
-  #   end
-  #   opposing_team_by_won = opposing_team_id_info.group_by do |opposing_team_info|
-  #     opposing_team_info[0]
-  #   end
-  #   total_wins = 0
-  #   total_wins_and_games_hash = {}
-  #   opposing_team_by_won.each do |team_id, opposing_team_info|
-  #     total_games = opposing_team_info.length
-  #     total_wins = opposing_team_info.count do |info|
-  #       info[1] == "TRUE"
-  #     end
-  #     total_wins_and_games_hash[team_id] = (total_wins.to_f / total_games.to_f).round(2)
-  #   end
-  #   final_hash = {}
-  #   total_wins_and_games_hash.each do |team_id, win_percentage|
-  #     final_hash[convert_team_id_and_team_name(team_id)] = win_percentage
-  #   end
-  #   final_hash
-  # end
-# end
