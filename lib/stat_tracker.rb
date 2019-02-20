@@ -921,25 +921,14 @@ class StatTracker
     final_hash
   end
 
-  # def most_hits(name)
-  #   game_ids = []
-  #   games_by_season
-  #   @game_teams.each do |hits|
-  #     game.game_id == game_id
-  #     game_ids << game
-  #     end
-  #   #end
-  #     binding.pry
-  #   @games.each do |season, game_id|
-  #     if game.season == season
-  #       game_ids_by_season << season
-  #     elsif
-  #       game_ids_by_season << game_id
-  #     end
-  #   end
-  #   end
-  #   game.game_id
-  #     team =
-  #     convert_team_id_and_team_name(team)
-  # end
+  def most_hits(season)
+    gt_hash = @game_teams.group_by do |game_team|
+      game_team.season
+    end
+    key = gt_hash[season].max_by do |game_team|
+      game_team.hits
+    end
+      team = key.team_id
+      convert_team_id_and_team_name(team)
+  end
 end
