@@ -1,6 +1,6 @@
 module SeasonStats
 
-  def most_hits(season) #SeasonStats
+  def most_hits(season)
     gt_hash = @game_teams.group_by do |game_team|
       game_team.season
     end
@@ -16,7 +16,7 @@ module SeasonStats
     convert_team_id_and_team_name(most_hits)
   end
 
-  def least_hits(season) #SeasonStats
+  def least_hits(season)
     gt_hash = @game_teams.group_by do |game_team|
       game_team.season
     end
