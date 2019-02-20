@@ -563,7 +563,7 @@ class StatTracker
     @teams.each do |team|
       if team.team_id == team_id
         team.instance_variables.each do |variable|
-          hash[variable] = team.instance_variable_get(variable)
+          hash[variable.to_s[1..-1]] = team.instance_variable_get(variable)
         end
       end
     end
