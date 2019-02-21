@@ -301,67 +301,6 @@ class StatTracker
     hash
   end
 
-  # def highest_scoring_visitor #LeagueStats
-  #   sorted_away_games = group_by_team_id(@games_away)
-  #   team_id_with_average_goals = all_goals_per_team(sorted_away_games)
-  #
-  #   best_team_id = team_id_with_average_goals.max_by { |team_id, team_goals| team_goals }[0]
-  #   convert_team_id_and_team_name(best_team_id)
-  # end
-
-  # def highest_scoring_home_team #LeagueStats
-  #   sorted_home_games = group_by_team_id(@games_home)
-  #   team_id_with_average_goals = all_goals_per_team(sorted_home_games)
-  #
-  #   best_team_id = team_id_with_average_goals.max_by { |team_id, team_goals| team_goals }[0]
-  #   convert_team_id_and_team_name(best_team_id)
-  # end
-  #
-  # def lowest_scoring_visitor #LeagueStats
-  #   sorted_away_games = group_by_team_id(@games_away)
-  #   team_id_with_average_goals = all_goals_per_team(sorted_away_games)
-  #
-  #   worst_team_id = team_id_with_average_goals.min_by { |team_id, team_goals| team_goals }[0]
-  #   convert_team_id_and_team_name(worst_team_id)
-  # end
-  #
-  # def lowest_scoring_home_team #LeagueStats
-  #   sorted_home_games = group_by_team_id(@games_home)
-  #   team_id_with_average_goals = all_goals_per_team(sorted_home_games)
-  #
-  #   worst_team_id = team_id_with_average_goals.min_by { |team_id, team_goals| team_goals }[0]
-  #   convert_team_id_and_team_name(worst_team_id)
-  # end
-
-  # def winningest_team #LeagueStats
-  #   win_tracker = {}
-  #
-  #   @teams_hash.each { |team_id, team_object| win_tracker[team_id] = 0 }
-  #
-  #   game_grouping = @game_team_pairs
-  #
-  #   gp_by_team_id = game_pairs_by_attribute(game_grouping, :team_id)
-  #
-  #   gp_by_team_id.each do |team_id, game_pair_array|
-  #     total_games = game_pair_array.size
-  #     team_wins = wins_for_team(game_pair_array, team_id)
-  #     average = (team_wins.to_f/total_games).round(2)
-  #     win_tracker[team_id] = average
-  #   end
-  #
-  #   best_team_id = win_tracker.max_by { |team_id, win_percentage| win_percentage }[0]
-  #   convert_team_id_and_team_name(best_team_id)
-  # end
-  #
-  # def game_pairs_by_attribute(game_grouping ,attr_sym)
-  #   gp_by_attr = Hash.new { |hash, key| hash[key] = [] }
-  #   game_grouping.each do |game_pair|
-  #     gp_by_attr[game_pair[0].send(attr_sym)] << game_pair
-  #     gp_by_attr[game_pair[1].send(attr_sym)] << game_pair
-  #   end
-  #   gp_by_attr
-  # end
-
   def win_determination(game_array)
     if game_array.length == 2
       if game_array[0].hoa == 'home'
@@ -379,67 +318,6 @@ class StatTracker
       end
     end
   end
-
-  # def best_defense #LeagueStats
-  #   win_tracker = group_by_team_id(@game_teams)
-  #   win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
-  #   game_grouping = @game_teams.group_by { |row| row.game_id }
-  #   defense_tracker = []
-  #   game_grouping.each do |game_id, game_array|
-  #     if game_array.length == 2
-  #       if game_array[0].hoa == 'home'
-  #         home_team = game_array[0]
-  #         away_team = game_array[1]
-  #       else
-  #         home_team = game_array[1]
-  #         away_team = game_array[0]
-  #       end
-  #       array = [home_team.team_id, away_team.goals]
-  #       away_array = [away_team.team_id, home_team.goals]
-  #       defense_tracker << array
-  #       defense_tracker << away_array
-  #     end
-  #   end
-  #   defense_tracker.each do |score_outcome|
-  #     win_tracker[score_outcome [0]] += score_outcome[1]
-  #   end
-  #   team = win_tracker.min_by do |team_id, goals_against|
-  #     goals_against
-  #   end
-  #   team = team[0]
-  #   convert_team_id_and_team_name(team)
-  # end
-
-  # def worst_defense #LeagueStats
-  #   win_tracker = group_by_team_id(@game_teams)
-  #   win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
-  #   game_grouping = @game_teams.group_by { |row| row.game_id }
-  #   defense_tracker = []
-  #   game_grouping.each do |game_id, game_array|
-  #     if game_array.length == 2
-  #       if game_array[0].hoa == 'home'
-  #         home_team = game_array[0]
-  #         away_team = game_array[1]
-  #       else
-  #         home_team = game_array[1]
-  #         away_team = game_array[0]
-  #       end
-  #       array = [home_team.team_id, away_team.goals]
-  #       away_array = [away_team.team_id, home_team.goals]
-  #       defense_tracker << array
-  #       defense_tracker << away_array
-  #     end
-  #   end
-  #
-  #   defense_tracker.each do |score_outcome|
-  #     win_tracker[score_outcome [0]] += score_outcome[1]
-  #   end
-  #   team = win_tracker.max_by do |team_id, goals_against|
-  #     goals_against
-  #   end
-  #   team = team[0]
-  #   convert_team_id_and_team_name(team)
-  # end
 
   def best_season(team_id) #TeamStats
     game_teams_by_season = @game_teams.group_by(&:season)
@@ -899,46 +777,4 @@ class StatTracker
     end
     final_hash
   end
-
-  # def most_hits(season) #SeasonStats
-  #   gt_hash = @game_teams.group_by do |game_team|
-  #     game_team.season
-  #   end
-  #
-  #   team_agg = Hash.new { |hash, key| hash[key] = [] }
-  #
-  #   team_hits_array_hash = gt_hash[season].inject(team_agg) do |hash, game_team|
-  #     hash[game_team.team_id] << game_team.hits
-  #     hash
-  #   end
-  #
-  #   team_hits_array_hash.each do |team_id, hits_array|
-  #     team_hits_array_hash[team_id] = hits_array.sum
-  #   end
-  #
-  #   most_hits = team_hits_array_hash.max_by { |team_id, hits_tally| hits_tally }[0]
-  #
-  #   convert_team_id_and_team_name(most_hits)
-  # end
-  #
-  # def least_hits(season) #SeasonStats
-  #   gt_hash = @game_teams.group_by do |game_team|
-  #     game_team.season
-  #   end
-  #
-  #   team_agg = Hash.new { |hash, key| hash[key] = [] }
-  #
-  #   team_hits_array_hash = gt_hash[season].inject(team_agg) do |hash, game_team|
-  #     hash[game_team.team_id] << game_team.hits
-  #     hash
-  #   end
-  #
-  #   team_hits_array_hash.each do |team_id, hits_array|
-  #     team_hits_array_hash[team_id] = hits_array.sum
-  #   end
-  #
-  #   least_hits = team_hits_array_hash.min_by { |team_id, hits_tally| hits_tally }[0]
-  #
-  #   convert_team_id_and_team_name(least_hits)
-  # end
 end
