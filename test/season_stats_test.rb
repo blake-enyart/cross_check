@@ -20,11 +20,11 @@ class SeasonStatsTest < Minitest::Test
   end
 
   def test_name_of_team_with_most_hits_returned
+    
     assert_equal "Rangers", @stat_tracker.most_hits("20122013")
   end
 
   def test_name_of_team_with_most_hits_returned_large_data
-    skip
     game_path = './data/game.csv'
     team_path = './data/team_info.csv'
     game_teams_path = './data/game_teams_stats.csv'

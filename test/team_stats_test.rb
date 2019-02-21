@@ -118,6 +118,7 @@ class TeamStatsTest < Minitest::Test
   end
 
   def test_rival_returns_correctly_large_data
+    skip
     game_path = './data/game.csv'
     team_path = './data/team_info.csv'
     game_teams_path = './data/game_teams_stats.csv'
@@ -139,6 +140,4 @@ class TeamStatsTest < Minitest::Test
     }
     assert_equal expected, @stat_tracker.head_to_head("6")
   end
-
-
 end

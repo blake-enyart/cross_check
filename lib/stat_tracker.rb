@@ -2,11 +2,13 @@ require_relative './class_helper'
 require_relative './season_stats'
 require_relative './team_stats'
 require_relative './game_stats'
+require_relative './league_stats'
 
 class StatTracker
   include SeasonStats
   include TeamStats
   include GameStats
+  include LeagueStats
 
   attr_reader :games,
               :teams,
@@ -180,5 +182,52 @@ class StatTracker
     end
     team = team[0]
     convert_team_id_and_team_name(team)
+  end
+
+  def win_determination(game_array)
+    if game_array.length == 2
+      if game_array[0].hoa == 'home'
+        home_team = game_array[0]
+        away_team = game_array[1]
+      else
+        home_team = game_array[1]
+        away_team = game_array[0]
+      end
+
+      if home_team.goals > away_team.goals
+        [home_team.team_id, 1]
+      else
+        [away_team.team_id, 1]
+      end
+    end
+  end
+
+  def all_goals_per_team(teams_hash)
+    hash = {}
+    teams_hash.each do |team_id, games_array|
+      team_goals = 0
+      total_games = games_array.size
+      games_array.each do |game|
+        team_goals += game.goals.to_i
+      end
+      average_goals_per_game = (team_goals.to_f/total_games).round(2)
+      hash[team_id] = average_goals_per_game
+    end
+    hash
+  end
+
+  def group_game_teams_by_team_id
+    @game_teams.group_by do |game_team|
+      game_team.team_id
+    end
+  end
+
+  def game_pairs_by_attribute(game_grouping ,attr_sym)
+    gp_by_attr = Hash.new { |hash, key| hash[key] = [] }
+    game_grouping.each do |game_pair|
+      gp_by_attr[game_pair[0].send(attr_sym)] << game_pair
+      gp_by_attr[game_pair[1].send(attr_sym)] << game_pair
+    end
+    gp_by_attr
   end
 end
