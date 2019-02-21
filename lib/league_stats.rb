@@ -1,4 +1,7 @@
+require_relative './game_stats'
+
 module LeagueStats
+  include GameStats
 
   def count_of_teams
     @teams.length
@@ -135,7 +138,7 @@ module LeagueStats
     convert_team_id_and_team_name(best_team_id)
   end
 
-  def best_defense 
+  def best_defense
     win_tracker = group_by_team_id(@game_teams)
     win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
     game_grouping = @game_teams.group_by { |row| row.game_id }

@@ -314,24 +314,17 @@ module TeamStats
     end
     total_wins = 0
     total_wins_and_games_hash = {}
-    opposing_team_by_won.each do |team_id, opposing_team_info|
+    opposing_team_by_won.each do |team_id_opponent, opposing_team_info|
       total_games = opposing_team_info.length
       total_wins = opposing_team_info.count do |info|
         info[1] == "FALSE"
       end
-      total_wins_and_games_hash[team_id] = (total_wins.to_f / total_games.to_f).round(2)
+      total_wins_and_games_hash[team_id_opponent] = (total_wins.to_f / total_games.to_f).round(2)
     end
     final_hash = {}
-    total_wins_and_games_hash.each do |team_id, win_percentage|
-      final_hash[convert_team_id_and_team_name(team_id)] = win_percentage
+    total_wins_and_games_hash.each do |team_id_opponent, win_percentage|
+      final_hash[convert_team_id_and_team_name(team_id_opponent)] = win_percentage
     end
     final_hash
   end
 end
-
-  #Missing Tests
-  #wins_for_team
-  #best_season
-
-  #Failing Tests
-  #rival
