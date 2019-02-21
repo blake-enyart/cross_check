@@ -36,45 +36,9 @@ class StatTrackerTest < Minitest::Test
     assert_equal GameTeam, StatTracker.from_csv(@locations).game_teams[0].class
   end
 
-  def test_it_can_calculate_average_goals_per_game
-
-    assert_equal 5.15, @stat_tracker.average_goals_per_game
-  end
-
   def test_it_gets_count_of_teams
 
     assert_equal 4, @stat_tracker.count_of_teams
-  end
-
-  def test_biggest_blowout_returns_correct_difference
-
-    assert_equal 5, @stat_tracker.biggest_blowout
-  end
-
-  def test_highest_total_score_returned
-
-    assert_equal 9, @stat_tracker.highest_total_score
-  end
-
-  def test_lowest_total_score_returned
-
-    assert_equal 1, @stat_tracker.lowest_total_score
-  end
-
-  def test_percentage_home_wins_returns_correctly
-
-    assert_equal 0.63, @stat_tracker.percentage_home_wins
-  end
-
-  def test_percentage_visitor_wins_returns_correctly
-
-    assert_equal 0.40, @stat_tracker.percentage_visitor_wins
-  end
-
-  def test_count_of_games_by_season_returns_correct_hash
-    expected = {'20122013' => 8, '20132014' => 12}
-
-    assert_equal expected, @stat_tracker.count_of_games_by_season
   end
 
   def test_it_can_find_team_with_best_fans
@@ -105,14 +69,6 @@ class StatTrackerTest < Minitest::Test
     assert_equal "2012030221", @stat_tracker.group_game_teams_by_team_id["3"][0].game_id
   end
 
-  def test_it_can_calculate_average_goals_by_season
-    assert_equal ({"20122013"=>5.5, "20132014"=>4.92}), @stat_tracker.average_goals_by_season
-  end
-
-  def test_it_can_calculate_total_goals_for_a_given_game_array
-    assert_equal 103, @stat_tracker.total_goals(@stat_tracker.games)
-  end
-
   def test_it_can_get_games_by_season
     assert_equal (['20122013', '20132014']), @stat_tracker.games_by_season.keys
     assert_equal 8, @stat_tracker.games_by_season['20122013'].count
@@ -126,6 +82,12 @@ class StatTrackerTest < Minitest::Test
   def test_worst_offense_returns_correct_team
 
     assert_equal 'Red Wings', @stat_tracker.worst_offense
+  end
+
+  def test_it_returns_biggest_team_blowout
+
+    assert_equal 3, @stat_tracker.biggest_team_blowout("17")
+    assert_equal 5, @stat_tracker.biggest_team_blowout("6")
   end
 
   def test_highest_scoring_visitor_returns_correctly
@@ -168,5 +130,4 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal "Red Wings", @stat_tracker.best_defense
   end
-
 end
