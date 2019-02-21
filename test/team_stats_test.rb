@@ -22,6 +22,10 @@ class TeamStatsTest < Minitest::Test
     assert_equal "20132014", @stat_tracker.worst_season("3")
   end
 
+  def test_best_season_returns_correctly
+    assert_equal "20122013", @stat_tracker.best_season("3")
+  end
+
   def test_it_can_find_most_goals_scored_for_a_particular_team
     assert_equal 6, @stat_tracker.most_goals_scored("17")
   end
@@ -115,22 +119,6 @@ class TeamStatsTest < Minitest::Test
 
   def test_rival_returns_correctly
     assert_equal "Red Wings", @stat_tracker.rival("6")
-  end
-
-  def test_rival_returns_correctly_large_data
-    skip
-    game_path = './data/game.csv'
-    team_path = './data/team_info.csv'
-    game_teams_path = './data/game_teams_stats.csv'
-
-    locations = {
-      games: game_path,
-      teams: team_path,
-      game_teams: game_teams_path
-    }
-
-    stat_tracker = StatTracker.from_csv(locations)
-    assert_equal "Red Wings", stat_tracker.rival("18")
   end
 
   def test_it_can_calculate_head_to_head
