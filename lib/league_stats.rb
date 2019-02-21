@@ -89,7 +89,6 @@ module LeagueStats
   def highest_scoring_visitor
     sorted_away_games = group_by_team_id(@games_away)
     team_id_with_average_goals = all_goals_per_team(sorted_away_games)
-
     best_team_id = team_id_with_average_goals.max_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(best_team_id)
   end
@@ -97,7 +96,6 @@ module LeagueStats
   def highest_scoring_home_team
     sorted_home_games = group_by_team_id(@games_home)
     team_id_with_average_goals = all_goals_per_team(sorted_home_games)
-
     best_team_id = team_id_with_average_goals.max_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(best_team_id)
   end
@@ -105,7 +103,6 @@ module LeagueStats
   def lowest_scoring_visitor
     sorted_away_games = group_by_team_id(@games_away)
     team_id_with_average_goals = all_goals_per_team(sorted_away_games)
-
     worst_team_id = team_id_with_average_goals.min_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(worst_team_id)
   end
@@ -113,27 +110,21 @@ module LeagueStats
   def lowest_scoring_home_team
     sorted_home_games = group_by_team_id(@games_home)
     team_id_with_average_goals = all_goals_per_team(sorted_home_games)
-
     worst_team_id = team_id_with_average_goals.min_by { |team_id, team_goals| team_goals }[0]
     convert_team_id_and_team_name(worst_team_id)
   end
 
-  def winningest_team #LeagueStats
+  def winningest_team
     win_tracker = {}
-
     @teams_hash.each { |team_id, team_object| win_tracker[team_id] = 0 }
-
     game_grouping = @game_team_pairs
-
     gp_by_team_id = game_pairs_by_attribute(game_grouping, :team_id)
-
     gp_by_team_id.each do |team_id, game_pair_array|
       total_games = game_pair_array.size
       team_wins = wins_for_team(game_pair_array, team_id)
       average = (team_wins.to_f/total_games).round(2)
       win_tracker[team_id] = average
     end
-
     best_team_id = win_tracker.max_by { |team_id, win_percentage| win_percentage }[0]
     convert_team_id_and_team_name(best_team_id)
   end
@@ -168,7 +159,7 @@ module LeagueStats
     convert_team_id_and_team_name(team)
   end
 
-  def worst_defense #LeagueStats
+  def worst_defense
     win_tracker = group_by_team_id(@game_teams)
     win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
     game_grouping = @game_teams.group_by { |row| row.game_id }
@@ -188,7 +179,6 @@ module LeagueStats
         defense_tracker << away_array
       end
     end
-
     defense_tracker.each do |score_outcome|
       win_tracker[score_outcome [0]] += score_outcome[1]
     end
