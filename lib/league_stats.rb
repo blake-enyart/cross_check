@@ -130,8 +130,11 @@ module LeagueStats
   end
 
   def best_defense
-    win_tracker = group_by_team_id(@game_teams)
-    win_tracker = win_tracker.each { |k,v| win_tracker[k] = 0 }
+    win_tracker = Hash.new(0)
+    @teams_hash.each do |team_id, team_object|
+      win_tracker[team_id]
+    end
+
     game_grouping = @game_teams.group_by { |row| row.game_id }
     defense_tracker = []
     game_grouping.each do |game_id, game_array|
@@ -155,6 +158,7 @@ module LeagueStats
     team = win_tracker.min_by do |team_id, goals_against|
       goals_against
     end
+
     team = team[0]
     convert_team_id_and_team_name(team)
   end
