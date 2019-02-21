@@ -130,7 +130,6 @@ class StatTrackerTest < Minitest::Test
   def test_team_info_returns_attributes_in_hash
     expected = {"team_id"=>"6", "franchise_id"=>"6", "short_name"=>"Boston", "team_name"=>"Bruins", "abbreviation"=>"BOS", "link"=>"/api/v1/teams/6"}
 
-
     assert_equal expected, @stat_tracker.team_info("6")
   end
 
@@ -154,18 +153,15 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Red Wings", @stat_tracker.best_defense
   end
 
-
   def test_it_returns_worst_loss
 
     assert_equal 5, @stat_tracker.worst_loss("17")
     assert_equal 3, @stat_tracker.worst_loss("6")
   end
 
-
-
   def test_it_can_compile_seasonal_summary
 
-  expected = {
+    expected = {
     "20122013" => {
       :preseason => {
         :win_percentage=>0.0,
@@ -294,11 +290,6 @@ class StatTrackerTest < Minitest::Test
 
     assert_equal "Canucks", stat_tracker.biggest_surprise("20122013")
   end
-
-  # def test_name_of_team_with_most_hits_returned
-  #
-  #   assert_equal "Rangers", @stat_tracker.most_hits("20122013")
-  # end
 
   def test_name_of_team_with_least_hits_returned
 

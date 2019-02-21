@@ -123,10 +123,6 @@ class StatTracker
     @teams.length
   end
 
-
-
-
-
   def best_fans #LeagueStats
     home_away_win_difference_hash = {}
     group_game_teams_by_team_id.each do |team_id, game_teams|
