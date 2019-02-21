@@ -36,6 +36,7 @@ class StatTrackerTest < Minitest::Test
     assert_equal GameTeam, StatTracker.from_csv(@locations).game_teams[0].class
   end
 
+
   def test_it_gets_count_of_teams
 
     assert_equal 4, @stat_tracker.count_of_teams
@@ -111,6 +112,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_winningest_team_returns_correct_team_large_data
+
     game_path = './data/game.csv'
     team_path = './data/team_info.csv'
     game_teams_path = './data/game_teams_stats.csv'
@@ -122,6 +124,7 @@ class StatTrackerTest < Minitest::Test
     }
 
     stat_tracker = StatTracker.from_csv(locations)
+
 
     assert_equal "Golden Knights", stat_tracker.winningest_team
   end
