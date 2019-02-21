@@ -22,6 +22,10 @@ class TeamStatsTest < Minitest::Test
     assert_equal "20132014", @stat_tracker.worst_season("3")
   end
 
+  def test_best_season_returns_correctly
+    assert_equal "20122013", @stat_tracker.best_season("3")
+  end
+
   def test_it_can_find_most_goals_scored_for_a_particular_team
     assert_equal 6, @stat_tracker.most_goals_scored("17")
   end
