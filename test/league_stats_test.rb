@@ -95,4 +95,20 @@ class LeagueStatsTest < Minitest::Test
 
     assert_equal "Red Wings", @stat_tracker.best_defense
   end
+
+  def test_it_returns_worst_defense_large_data
+    game_path = './data/game.csv'
+    team_path = './data/team_info.csv'
+    game_teams_path = './data/game_teams_stats.csv'
+
+    locations = {
+      games: game_path,
+      teams: team_path,
+      game_teams: game_teams_path
+    }
+
+    stat_tracker = StatTracker.from_csv(locations)
+
+    assert_equal "Islanders", stat_tracker.worst_defense
+  end
 end
