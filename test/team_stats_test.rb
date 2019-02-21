@@ -117,22 +117,6 @@ class TeamStatsTest < Minitest::Test
     assert_equal "Red Wings", @stat_tracker.rival("6")
   end
 
-  def test_rival_returns_correctly_large_data
-    skip
-    game_path = './data/game.csv'
-    team_path = './data/team_info.csv'
-    game_teams_path = './data/game_teams_stats.csv'
-
-    locations = {
-      games: game_path,
-      teams: team_path,
-      game_teams: game_teams_path
-    }
-
-    stat_tracker = StatTracker.from_csv(locations)
-    assert_equal "Red Wings", stat_tracker.rival("18")
-  end
-
   def test_it_can_calculate_head_to_head
     expected = {
       "Rangers" => 0.73,
